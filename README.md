@@ -2,13 +2,6 @@
 
 ## Team Name: American Sushi Indulgers & Connoisseurs (ASICs)
 
-### Team Members:
-- Yushi Homma (hommayushi3@gmail.com) - Aledade, Inc.
-- Kyle Weaver (kylecweaver@gmail.com) - Meta Platforms, Inc.
-- Patrick Tan (tan.patrick.river@gmail.com) - Meta Platforms, Inc.
-- Franklin Ye (frankybifqy7@gmail.com) - Coinbase Global, Inc.
-- Kefan Li (likefan052@gmail.com) - Amazon.com, Inc.
-
 ## Overview
 
 Current e-commerce platforms lack personalization and guidance, resulting in suboptimal shopping experiences. Our solution is an AI-powered shopping concierge that emulates the experience of shopping in a high-end retail store. Our AI concierge allows users to express their desires conversationally, get personalized product recommendations, try-on products virtually, and receive styling advice. It also continuously learns from user interactions, improving its understanding of individual preferences over time.

@@ -1,6 +1,7 @@
 import re
 
-import yfinance as yf
+from realtime.product_search.tools import SearchByTextQuery, SearchByImageQuery
+from realtime.virtual_try_on import VirtualTryOn
 from pydantic import BaseModel, Field
 
 
@@ -29,11 +30,8 @@ class QueryStockPrice(BaseModel):
     @staticmethod
     async def handler(symbol: str, period: str):
         try:
-            stock = yf.Ticker(symbol)
-            hist = stock.history(period=period)
-            if hist.empty:
-                return {"error": "No data found for the given symbol."}
-            return hist.to_json()
+            test = "text"
+            return test
  
         except Exception as e:
             return {"error": str(e)}
@@ -65,5 +63,5 @@ class QueryStockPrice(BaseModel):
     
 # draw_plotly_chart = (draw_plotly_chart_def, draw_plotly_chart_handler)
 
-tool_models = [QueryStockPrice]
+tool_models = [SearchByTextQuery, SearchByImageQuery, VirtualTryOn]
 tools = list(map(pydantic_to_tool_schema, tool_models))

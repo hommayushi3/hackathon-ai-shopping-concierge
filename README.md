@@ -81,7 +81,24 @@ pip install poetry
 poetry install
 ```
 4. Add a `.env` file similar to the .env.example with keys from the respective services in the root directory. (Get the .env from Yushi).
-5. Start the chainlit app.
+
+## Indexing
+1. Create a directory called `data` in the root of the repo. Then upload `product_catalog.csv` and the `product_catalog_images` directory of images into the `data` folder.
+2. Run the following script (DO NOT RUN, Yushi already ran this!):
+```bash
+python scripts/populate_index.py
+```
+
+## Run App
+1. Start the chainlit app.
 ```bash
 chainlit run app.py
 ```
+Click on the microphone to start session. Tell the concierge what clothes you're looking for. Ask to find similar products to ones recommended. Tell the concierge you'd like to try on a particular recommendation (it'll prompt you to upload one full-body image of yourself)
+
+## Features Built So Far
+1. Chainlit UI (Webpage)
+2. Real-Time Conversation
+3. Product Semantic/Metadata Index and Search (with provided tags)
+4. Similar Image Search
+5. Virtual Try On

@@ -81,10 +81,10 @@ pip install poetry
 poetry install
 ```
 4. Add a `.env` file similar to the .env.example with keys from the respective services in the root directory. (Get the .env from Yushi).
+5. Create a directory called `data` in the root of the repo. Then, from [the Google Drive link here](https://drive.google.com/drive/folders/1S38q4_RygVsRx4_ICBZBZgRsQSM_yGfF?usp=sharing), upload `product_catalog.csv` and the `product_catalog_images` directory of images into the `data` folder.
 
 ## Indexing
-1. Create a directory called `data` in the root of the repo. Then upload `product_catalog.csv` and the `product_catalog_images` directory of images into the `data` folder.
-2. Run the following script (DO NOT RUN, Yushi already ran this!):
+1. Run the following script (DO NOT RUN, Yushi already ran this!):
 ```bash
 python scripts/populate_index.py
 ```

@@ -1,8 +1,7 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import chainlit as cl
-import yaml
-from realtime.product_search.base import ProductSearch, MetadataSearch, MODEL_NAME
+from realtime.product_search.base import ProductSearch, MODEL_NAME, image_to_data_uri
 from pydantic import BaseModel
 
 
@@ -94,7 +93,7 @@ class SearchByImageQuery(BaseModel):
             products=latest_products
         )
         product_in_question = latest_products[product_in_question_index]
-        image = product_search._image_to_base64(product_in_question["metadata"]["image"])
+        image = image_to_data_uri(product_in_question["metadata"]["image"])
         # Create image embedding
         print("Runing image embedding")
         query_embedding = product_search.co.embed(
@@ -105,7 +104,7 @@ class SearchByImageQuery(BaseModel):
         print("Image embedding done")
         
         # Prepare filter conditions
-        filt = product_search.generate_filters_from_query(image)
+        filt = await product_search.generate_filters_from_query(image)
 
         # Query the index
         results = product_search.index.query(

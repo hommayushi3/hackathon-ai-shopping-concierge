@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 
 SEGMIND_API_KEY = os.getenv("SEGMIND_API_KEY")
-SEGMIND_API_BASE = "https://api.segmind.com/v1/try-on-diffusion"
+SEGMIND_API_BASE = "https://api.segmind.com/v1/virtual-try-on"
 num_inference_steps: int = 35
 guidance_scale: int = 2
 seed: int = None

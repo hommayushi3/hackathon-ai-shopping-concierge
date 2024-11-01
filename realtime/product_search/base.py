@@ -8,7 +8,6 @@ import chainlit as cl
 import cohere
 import pandas as pd
 from pinecone import Pinecone, ServerlessSpec
-from realtime.vision import image_to_data_uri
 from tqdm import tqdm
 
 
@@ -55,6 +54,7 @@ class MetadataSearch:
                 )
             )
         self.index = self.pc.Index(index_name)
+        self.index_size = self.index.describe_index_stats().get('total_vector_count', 0)
 
     def _process_metadata_batch(self, batch_df: pd.DataFrame) -> List[tuple]:
         """
@@ -150,6 +150,7 @@ class MetadataSearch:
             # Upsert to Pinecone if we have vectors
             if to_upsert:
                 self.index.upsert(vectors=to_upsert)
+        self.index_size = self.index.describe_index_stats().get('total_vector_count', 0)
 
     @lru_cache(maxsize=8)
     def calculate_query_embedding(self, query: str):
@@ -323,8 +324,8 @@ class ProductSearch:
             ).embeddings
         
         # Prepare image embeddings batch
-        valid_images = []
-        image_indices = []
+        # valid_images = []
+        # image_indices = []
         
         # for idx, row in batch_df.iterrows():
         #     image_path = os.path.join(images_dir, f"0{row['article_id']}.jpg")
@@ -441,9 +442,9 @@ class ProductSearch:
         for column in [
             'colour_group_name',
             'product_type_name',
-            'product_group_name',
             'index_name',
-            'section_name'
+            'section_name',
+            'on_sale'
         ]:
             searcher = MetadataSearch(column_name=column)
             self.metadata_searchers[column] = searcher
@@ -473,7 +474,7 @@ class ProductSearch:
         for searcher in self.metadata_searchers.values():
             column_filter = searcher.search_for_value_filters(
                 query=query,
-                top_k=top_k,
+                top_k=min(top_k, searcher.index_size),
                 score_threshold=score_threshold
             )
             filters.append(column_filter)

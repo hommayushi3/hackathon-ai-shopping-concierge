@@ -6,7 +6,10 @@ from inspect import cleandoc
 from mimetypes import guess_type
 
 from PIL import Image
+from dotenv import load_dotenv
 from litellm import acompletion
+
+load_dotenv(override=True)
 
 
 VISION_SYSTEM_PROMPT = cleandoc("""
@@ -35,7 +38,7 @@ is "colour_group", return [].
 IDENTIFY_PREVIOUS_RECOMMENDATION_PROMPT = cleandoc("""
 Identify the index of the previous product recommendation that the user is referencing based on the description provided and the 4 products listed.
 The user may reference the location of the product in the UI, here is the translation guide.
-(top left = index 1, top right = index 2, bottom left = index 3, bottom right = index 4).
+(top left = index 1, bottom left = index 2, top right = index 3, bottom right = index 4).
 Your response should simply be the integer index of the product referenced, 1-{num_products}.
 """).strip()
 

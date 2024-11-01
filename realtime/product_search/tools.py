@@ -1,7 +1,8 @@
 from typing import Dict, List
 
 import chainlit as cl
-from realtime.product_search.base import ProductSearch, MODEL_NAME, image_to_data_uri
+from realtime.product_search.base import ProductSearch, MODEL_NAME
+from realtime.vision import image_to_data_uri
 from pydantic import BaseModel
 
 
@@ -44,6 +45,12 @@ class SearchByTextQuery(BaseModel):
             top_k=top_k,
             include_metadata=True
         )
+        if len(results["matches"]) == 0:
+            results = product_search.index.query(
+                vector=query_embedding,
+                top_k=top_k,
+                include_metadata=True
+            )
         vision_model = cl.user_session.get("vision_model")
         reranked_indices = await vision_model.rerank_products_against_query(
             query=cl.user_session.get("latest_product_image"),
@@ -113,6 +120,12 @@ class SearchByImageQuery(BaseModel):
             top_k=top_k,
             include_metadata=True
         )
+        if len(results["matches"]) == 0:
+            results = product_search.index.query(
+                vector=query_embedding,
+                top_k=top_k,
+                include_metadata=True
+            )
         reranked_indices = await vision_model.rerank_products_against_image(
             query_image=image,
             products=results["matches"]

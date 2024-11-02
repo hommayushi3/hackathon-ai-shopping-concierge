@@ -1,9 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Carousel } from "react-responsive-carousel";
 import ProductSimpleCard from "../components/product/product-simple-card";
+import { useState, useEffect } from "react";
+import { getDb } from "../lib/product";
 
 export default function Home() {
-  const list = [1, 2, 3, 4, 5, 6, 7, 8];
+  const [isLoaded, setLoaded] = useState(false);
+  const [db, setResult] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isLoaded) {
+        const newData = await getDb();
+        setResult(() => newData);
+        setLoaded(true);
+      }
+    };
+    fetchData().catch((e) => {
+      console.error(`failed to fetch data: ${e}`);
+    });
+  }, [db, setResult, isLoaded, setLoaded]);
 
   return (
     <div>
@@ -129,13 +145,15 @@ export default function Home() {
         </div>
         <h4 className="mb-3 fw-semibold">New products</h4>
         <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-5">
-          {list.map((e, i) => {
-            return (
-              <div className="col" key={i}>
-                <ProductSimpleCard id={i} title={`Product ${i}`} />
-              </div>
-            );
-          })}
+          {
+            db &&
+            Object.keys(db).slice(0, 12).map((id) => {
+              return (
+                <div className="col" key={id}>
+                  <ProductSimpleCard id={id} productName={isLoaded ? db[id]['prod_name'] : `Product ${id}`} />
+                </div>
+              );
+            })}
         </div>
       </div>
       {/* <div className="d-flex flex-column align-items-center bg-primary py-5">

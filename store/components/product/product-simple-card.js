@@ -1,23 +1,22 @@
 import Link from "next/link";
 import ProductRating from "../product-rating";
+import {getProductImage} from "../../lib/product";
 
-function ProductSimpleCard({ id, title }) {
+function ProductSimpleCard({ id, productName }) {
   return (
     <div className="card h-100 border-0 shadow-sm">
       <div className="ratio ratio-1x1">
         <img
           className="card-img-top"
-          src={`https://source.unsplash.com/random/200x200?random=${Math.floor(
-            Math.random() * 100
-          )}`}
+          src={getProductImage(id)}
           alt="Product image."
           style={{ objectFit: "cover" }}
         />
       </div>
       <div className="card-body">
-        <Link href="/product/1">
+        <Link legacyBehavior href="/product/1">
           <a className="mb-1 text-dark text-decoration-none stretched-link">
-            Product name here
+            {productName}
           </a>
         </Link>
 

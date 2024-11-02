@@ -32,7 +32,7 @@ To address these key issues, we propose an AI-powered personal shopping concierg
 
 4. **Virtual Try-On**: If the AI concierge detects a user's interest in a specific product, it will proactively offer a virtual try-on experience, allowing the user to visualize themselves wearing the item using either their device's camera or uploaded images (Segmind API).
 
-5. **Styling Advice**: If the AI concierge determines that the user is looking for advice or feedback on their outfit, it will analyze the user's outfit using a visual understanding model (gpt-4o-mini) and provide personalized styling advice, as well as answer user questions.
+5. **Styling Advice**: If the AI concierge determines that the user is looking for advice or feedback on their outfit, it will analyze the user's outfit using a visual understanding model (gemini-1.5-flash-002) and provide personalized styling advice, as well as answer user questions.
 
 6. **Preference Learning**: As the AI concierge interacts with the user, it will learn more about the user's preferences and keep track of them by storing them in the database to help with future interactions.
 
@@ -50,9 +50,9 @@ To address these key issues, we propose an AI-powered personal shopping concierg
 
 1. **Real-time Speech and Conversation**: gpt-4o-realtime-preview enables bidirectional, real-time speech and text communication between the user and the AI concierge. Function calling allows the model to interact with external systems for product search and virtual try-on.
 
-2. **Image Understanding and Manipulation**: gpt-4o-mini provides image description and critique capabilities, allowing the AI to understand user-provided images and offer styling advice. Segmind's API powers the virtual try-on feature, generating realistic images of users wearing different products.
+2. **Image Understanding and Manipulation**: gemini-1.5-flash-002 provides image description and critique capabilities, allowing the AI to understand user-provided images and offer styling advice. Segmind's API powers the virtual try-on feature, generating realistic images of users wearing different products.
 
-3. **Semantic Search and Product Catalog**: The product catalog is indexed in Pinecone, a hybrid semantic-search enabled vector database. gpt-4o-mini enriches product data with additional tags, enabling nuanced semantic search based on user queries and preferences.
+3. **Semantic Search and Product Catalog**: The product catalog is indexed in Pinecone, a hybrid semantic-search enabled vector database. gemini-1.5-flash-002 enriches product data with additional tags, enabling nuanced semantic search based on user queries and preferences.
 
 4. **Personalized Recommendations**: User preferences learned during conversations are stored as natural language descriptions in "memory" and attached to the gpt-4o-realtime-preview system prompt, ensuring personalized recommendations across sessions.
 
@@ -64,7 +64,7 @@ To address these key issues, we propose an AI-powered personal shopping concierg
 The system architecture consists of:
 - User interaction with the web app
 - Communication with the gpt-4o-realtime-preview model
-- Integration with services like gpt-4o-mini for image understanding
+- Integration with services like gemini-1.5-flash-002 for image understanding
 - Segmind API for virtual try-on
 - Pinecone for product search
 - Storage and utilization of user preferences for experience personalization

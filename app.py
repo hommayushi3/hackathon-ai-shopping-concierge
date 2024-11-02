@@ -4,11 +4,14 @@ import asyncio
 import chainlit as cl
 from uuid import uuid4
 from chainlit.logger import logger
+from dotenv import load_dotenv
 
 from realtime import RealtimeClient
 from realtime.tools import tools
 from realtime.vision import VisionModel
 
+
+load_dotenv(override=True)
 
 async def setup_openai_vision():
     """Instantiate and configure the OpenAI Vision Model"""

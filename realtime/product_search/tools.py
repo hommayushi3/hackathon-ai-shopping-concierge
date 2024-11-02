@@ -1,8 +1,8 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import chainlit as cl
-import yaml
-from realtime.product_search.base import ProductSearch, MetadataSearch, MODEL_NAME
+from realtime.product_search.base import ProductSearch, MODEL_NAME
+from realtime.vision import image_to_data_uri
 from pydantic import BaseModel
 
 
@@ -45,6 +45,12 @@ class SearchByTextQuery(BaseModel):
             top_k=top_k,
             include_metadata=True
         )
+        if len(results["matches"]) == 0:
+            results = product_search.index.query(
+                vector=query_embedding,
+                top_k=top_k,
+                include_metadata=True
+            )
         vision_model = cl.user_session.get("vision_model")
         reranked_indices = await vision_model.rerank_products_against_query(
             query=cl.user_session.get("latest_product_image"),
@@ -94,7 +100,7 @@ class SearchByImageQuery(BaseModel):
             products=latest_products
         )
         product_in_question = latest_products[product_in_question_index]
-        image = product_search._image_to_base64(product_in_question["metadata"]["image"])
+        image = image_to_data_uri(product_in_question["metadata"]["image"])
         # Create image embedding
         print("Runing image embedding")
         query_embedding = product_search.co.embed(
@@ -105,7 +111,7 @@ class SearchByImageQuery(BaseModel):
         print("Image embedding done")
         
         # Prepare filter conditions
-        filt = product_search.generate_filters_from_query(image)
+        filt = await product_search.generate_filters_from_query(image)
 
         # Query the index
         results = product_search.index.query(
@@ -114,6 +120,12 @@ class SearchByImageQuery(BaseModel):
             top_k=top_k,
             include_metadata=True
         )
+        if len(results["matches"]) == 0:
+            results = product_search.index.query(
+                vector=query_embedding,
+                top_k=top_k,
+                include_metadata=True
+            )
         reranked_indices = await vision_model.rerank_products_against_image(
             query_image=image,
             products=results["matches"]

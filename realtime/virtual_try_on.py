@@ -36,6 +36,8 @@ class VirtualTryOn(BaseModel):
         description_of_previous_recommendation: str,
         category: str
     ) -> dict:
+        
+        await cl.Message(content=f"Sure! Let's start up the Virtual Try-On tool for you!").send()
 
         vision_model = VisionModel()
         latest_products = cl.user_session.get("latest_products")
@@ -56,6 +58,8 @@ class VirtualTryOn(BaseModel):
                 ).send()
             model_image = image_to_data_uri(files[0].path).split(",")[1]
             cl.user_session.set("latest_user_image", model_image)
+
+        await cl.Message(content=f"Generating your image now!").send()
 
         data = {
             "model_image": model_image,

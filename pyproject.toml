@@ -18,6 +18,9 @@ litellm = "^1.48.18"
 pinecone-client = "^5.0.1"
 cohere = "^5.11.1"
 pandas = "^2.2.3"
+google-generativeai = "^0.8.3"
+sse-starlette = "^2.1.3"
+pydantic = "^2.9.2"
 
 
 [build-system]

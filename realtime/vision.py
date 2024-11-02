@@ -8,6 +8,7 @@ from mimetypes import guess_type
 from PIL import Image
 from dotenv import load_dotenv
 from litellm import acompletion
+from pydantic import BaseModel
 
 load_dotenv(override=True)
 
@@ -42,18 +43,19 @@ The user may reference the location of the product in the UI, here is the transl
 Your response should simply be the integer index of the product referenced, 1-{num_products}.
 """).strip()
 
-RERANK_OUTPUT_SCHEMA = {
-    "type": "array",
-    "items": {
-        "type": "integer"
-    },
-}
-METADATA_FILTER_FILTER_SCHEMA = {
-    "type": "array",
-    "items": {
-        "type": "string"
-    }
-}
+
+class RerankResults(BaseModel):
+    indices: list[int]
+
+
+class MetadataFilterResults(BaseModel):
+    filter_values: list[str]
+
+
+class IdentifyPreviousRecommendationIndex(BaseModel):
+    index: int
+
+
 SAFETY_SETTINGS = [
     {
         "category": "HARM_CATEGORY_HARASSMENT",
@@ -116,7 +118,7 @@ class VisionModel:
                     ]
                 }
             ],
-            safety_settings=SAFETY_SETTINGS
+            # safety_settings=SAFETY_SETTINGS
         )
         return result.choices[0].message.content
             
@@ -152,10 +154,10 @@ class VisionModel:
                     ]
                 },
             ],
-            safety_settings=SAFETY_SETTINGS,
-            response_format={"type": "json_object", "response_schema": RERANK_OUTPUT_SCHEMA}
+            # safety_settings=SAFETY_SETTINGS,
+            response_format=RerankResults
         )
-        return eval(result.choices[0].message.content)
+        return [int(i) for i in eval(result.choices[0].message.content)["indices"]]
 
     async def rerank_products_against_image(self, query_image: str, products: list[dict]):
         """
@@ -193,10 +195,10 @@ class VisionModel:
                     ]
                 },
             ],
-            safety_settings=SAFETY_SETTINGS,
-            response_format={"type": "json_object", "response_schema": RERANK_OUTPUT_SCHEMA}
+            # safety_settings=SAFETY_SETTINGS,
+            response_format=RerankResults
         )
-        return eval(result.choices[0].message.content)
+        return [int(i) for i in eval(result.choices[0].message.content)["indices"]]
     
     async def identify_previous_recommendation(self, description: str, products: list[dict]):
         """
@@ -230,8 +232,8 @@ class VisionModel:
                     ]
                 },
             ],
-            safety_settings=SAFETY_SETTINGS,
-            response_format={"type": "json_object", "response_schema": {"type": "integer"}}
+            # safety_settings=SAFETY_SETTINGS,
+            response_format=IdentifyPreviousRecommendationIndex
         )
         try:
             return int(re.findall(r'\d', result.choices[0].message.content)[0]) - 1
@@ -261,7 +263,7 @@ class VisionModel:
                     ]
                 },
             ],
-            safety_settings=SAFETY_SETTINGS,
-            response_format={"type": "json_object", "response_schema": METADATA_FILTER_FILTER_SCHEMA}
+            # safety_settings=SAFETY_SETTINGS,
+            response_format=MetadataFilterResults
         )
-        return json.loads(result.choices[0].message.content)
+        return json.loads(result.choices[0].message.content)["filter_values"]

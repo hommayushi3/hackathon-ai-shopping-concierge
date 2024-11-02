@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+import asyncio
 import chainlit as cl
 from realtime.product_search.base import ProductSearch, MODEL_NAME
 from realtime.vision import image_to_data_uri
@@ -28,6 +29,7 @@ class SearchByTextQuery(BaseModel):
             filters: Dictionary of metadata filters
             top_k: Number of results to return
         """
+        await cl.Message(content=f"Searching for new recommendations!").send()
         # Create query embedding
         query_embedding = product_search.co.embed(
             texts=[query],
@@ -60,15 +62,17 @@ class SearchByTextQuery(BaseModel):
 
         cl.user_session.set("latest_products", results["matches"])
 
-        elements = [
-            cl.Image(
-                name=f'{match["metadata"]["prod_name"]} - {match["metadata"]["detail_desc"]} ({match["metadata"]["colour_group_name"]})',
-                path=match["metadata"]["image"],
-                display="inline"
-            )
-            for match in results['matches']
-        ]
-        await cl.Message(content=f"Recommendations for '{query}'", elements=elements).send()
+        formatted_result = generate_product_recommendations_message(results)
+        asyncio.create_task(cl.CopilotFunction(
+            name="recommendations",
+            args={
+                "query": query,
+                "filters": filt,
+                "article_ids": formatted_result["article_ids"]
+            }
+        ).acall())
+        for message in formatted_result["messages"]:
+            await message.send()
 
         display_results = str([match["metadata"] for match in results['matches']])
         return f"Now showing recommendations for '{query}':\n{display_results}."
@@ -93,6 +97,7 @@ class SearchByImageQuery(BaseModel):
         Args:
             user_description_of_previous_recommendation
         """
+        await cl.Message(content=f"Searching for new similar recommendations!").send()
         vision_model = cl.user_session.get("vision_model")
         latest_products = cl.user_session.get("latest_products")
         product_in_question_index = await vision_model.identify_previous_recommendation(
@@ -134,16 +139,38 @@ class SearchByImageQuery(BaseModel):
 
         cl.user_session.set("latest_products", results["matches"])
         
-        elements = [
-            cl.Image(
-                name=f'{match["metadata"]["prod_name"]} - {match["metadata"]["detail_desc"]} ({match["metadata"]["colour_group_name"]})',
-                path=match["metadata"]["image"],
-                display="inline"
-            )
-            for match in results['matches']
-        ]
-        await cl.Message(content=f"Other Similar Recommendations", elements=elements).send()
+        formatted_result = generate_product_recommendations_message(results)
+        asyncio.create_task(cl.CopilotFunction(
+            name="recommendations",
+            args={
+                "query": description_of_previous_recommendation,
+                "filters": filt,
+                "article_ids": formatted_result["article_ids"]
+            }
+        ).acall())
+        for message in formatted_result["messages"]:
+            await message.send()
 
         display_results = str([match["metadata"] for match in results['matches']])
         return f"Now showing similar recommendations:\n{display_results}."
-    
+
+
+def generate_product_recommendations_message(results: dict):
+    messages = []
+    for match in results["matches"]:
+        image = cl.Image(
+            name=f'{match["metadata"]["prod_name"]}',
+            path=match["metadata"]["image"],
+            display="inline"
+        )
+        messages.append(
+            cl.Message(
+                content=f'# {match["metadata"]["prod_name"]} ({match["metadata"]["colour_group_name"]})',
+                elements=[image]
+            )
+        )
+    return {
+        "messages": messages,
+        "article_ids": [match["metadata"]["article_id"] for match in results["matches"]]
+    }
+

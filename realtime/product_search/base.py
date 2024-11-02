@@ -152,7 +152,7 @@ class MetadataSearch:
                 self.index.upsert(vectors=to_upsert)
         self.index_size = self.index.describe_index_stats().get('total_vector_count', 0)
 
-    @lru_cache(maxsize=8)
+    @lru_cache(maxsize=64)
     def calculate_query_embedding(self, query: str):
         """
         Calculate the query embedding for a given text query.
@@ -452,8 +452,8 @@ class ProductSearch:
     async def generate_filters_from_query(
         self,
         query: str,
-        top_k: int = 8,
-        score_threshold: float = 0.2
+        top_k: int = 6,
+        score_threshold: float = 0.25
     ) -> Optional[Dict]:
         """
         Generate combined filters from a query across all metadata columns.

@@ -25,7 +25,7 @@ function ProductGridCard({ id, title, off }) {
   }
   return (
     <div className="card h-100 border-0 shadow-sm">
-      <Link href="/product/1">
+      <Link legacyBehavior href="/product/1">
         <a>
           <div className="ratio ratio-1x1">
             <img
@@ -42,7 +42,7 @@ function ProductGridCard({ id, title, off }) {
       </Link>
       <div className="card-body">
         <div className="vstack gap-2">
-          <Link href="/product/1">
+          <Link legacyBehavior href="/product/1">
             <a className="text-dark text-decoration-none">Product name here</a>
           </Link>
 

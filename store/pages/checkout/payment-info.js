@@ -92,10 +92,10 @@ function PaymentInfo() {
 
                 <div className="col-md-12 mt-4">
                   <div className="d-grid gap-2 d-flex justify-content-end">
-                    <Link href="/checkout/delivery-info">
+                    <Link legacyBehavior href="/checkout/delivery-info">
                       <a className="btn btn-outline-primary">Back</a>
                     </Link>
-                    <Link href="/checkout/confirm-checkout">
+                    <Link legacyBehavior href="/checkout/confirm-checkout">
                       <a className="btn btn-primary">Continue</a>
                     </Link>
                   </div>

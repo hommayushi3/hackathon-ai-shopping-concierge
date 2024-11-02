@@ -38,7 +38,7 @@ function CartItem() {
         />
       </div>
       <div className="ms-3 me-md-2 flex-grow-1">
-        <Link href="/product/1">
+        <Link legacyBehavior href="/product/1">
           <a className="text-dark text-decoration-none">Product name here</a>
         </Link>
         <small className="d-flex flex-wrap text-muted">

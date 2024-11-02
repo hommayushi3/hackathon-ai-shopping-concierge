@@ -74,7 +74,7 @@ function SignUp() {
               <hr className="text-muted" />
               <div className="text-center">
                 Already have an account?{" "}
-                <Link href="/auth/login">
+                <Link legacyBehavior href="/auth/login">
                   <a className="text-decoration-none fw-medium">Login</a>
                 </Link>
               </div>

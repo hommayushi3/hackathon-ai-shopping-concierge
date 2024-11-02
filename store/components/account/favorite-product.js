@@ -20,7 +20,7 @@ function FavoriteProduct({ id }) {
             />
           </div>
           <div className="d-flex flex-column flex-grow-1 ms-3">
-            <Link href="/product/1">
+            <Link legacyBehavior href="/product/1">
               <a className="text-dark text-decoration-none fw-semibold">
                 Product name here
               </a>

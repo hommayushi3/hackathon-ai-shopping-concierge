@@ -39,7 +39,7 @@ function CartItemRow() {
           />
           <div className="ms-3">
             <span className="h5">
-              <Link href="/product/1">
+              <Link legacyBehavior href="/product/1">
                 <a className="link-dark text-decoration-none">
                   Product name here
                 </a>

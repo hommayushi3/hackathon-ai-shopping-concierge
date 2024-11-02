@@ -7,7 +7,7 @@ function Header({ simple, hideAuth }) {
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div className="container">
-          <Link href="/">
+          <Link legacyBehavior href="/">
             <a className="navbar-brand">
               {/* <FontAwesomeIcon
                 icon={["fas", "shopping-basket"]}
@@ -37,19 +37,19 @@ function Header({ simple, hideAuth }) {
           <div className="d-flex">
             {!hideAuth && (
               <>
-                <Link href="/auth/login">
+                <Link legacyBehavior href="/auth/login">
                   <a className="btn btn-outline-primary d-none d-md-block">
                     Login
                   </a>
                 </Link>
-                <Link href="/auth/sign-up">
+                <Link legacyBehavior href="/auth/sign-up">
                   <a className="btn btn-primary d-none d-md-block ms-2">
                     Sign up
                   </a>
                 </Link>
               </>
             )}
-            <Link href="/shopping-cart">
+            <Link legacyBehavior href="/shopping-cart">
               <a className="btn btn-light border position-relative ms-2 fw-normal">
                 <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
                 &nbsp;Cart
@@ -78,32 +78,32 @@ function Header({ simple, hideAuth }) {
             <div className="collapse navbar-collapse" id="navbarNavDropdown">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <Link href="/explore">
+                  <Link legacyBehavior href="/explore">
                     <a className="nav-link">All Categories</a>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/explore">
+                  <Link legacyBehavior href="/explore">
                     <a className="nav-link">Electronics</a>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/explore">
+                  <Link legacyBehavior href="/explore">
                     <a className="nav-link">Clothing</a>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/explore">
+                  <Link legacyBehavior href="/explore">
                     <a className="nav-link">Furnitures</a>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/explore">
+                  <Link legacyBehavior href="/explore">
                     <a className="nav-link">Medicines</a>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/explore">
+                  <Link legacyBehavior href="/explore">
                     <a className="nav-link">Cosmetics</a>
                   </Link>
                 </li>

@@ -11,7 +11,7 @@ function AccountMenu({ current }) {
       </div>
       <div className="card-body">
         <div className="d-flex flex-column gap-2">
-          <Link href="/account/profile">
+          <Link legacyBehavior href="/account/profile">
             <a className={itemCss + (current == "profile" ? " active" : "")}>
               <FontAwesomeIcon
                 icon={["fas", "user-alt"]}
@@ -22,7 +22,7 @@ function AccountMenu({ current }) {
             </a>
           </Link>
 
-          <Link href="/account/current-orders">
+          <Link legacyBehavior href="/account/current-orders">
             <a
               className={
                 itemCss + (current == "current-orders" ? " active" : "")
@@ -37,7 +37,7 @@ function AccountMenu({ current }) {
             </a>
           </Link>
 
-          <Link href="/account/order-history">
+          <Link legacyBehavior href="/account/order-history">
             <a
               className={
                 itemCss + (current == "order-history" ? " active" : "")
@@ -52,7 +52,7 @@ function AccountMenu({ current }) {
             </a>
           </Link>
 
-          <Link href="/account/favorite-list">
+          <Link legacyBehavior href="/account/favorite-list">
             <a
               className={
                 itemCss + (current == "favorite-list" ? " active" : "")

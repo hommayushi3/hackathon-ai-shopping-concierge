@@ -28,10 +28,10 @@ function PricingCard({ data, pricingOnly, children }) {
 
           {!pricingOnly && (
             <div className="d-grid gap-2 mt-2">
-              <Link href="/checkout/delivery-info">
+              <Link legacyBehavior href="/checkout/delivery-info">
                 <a className="btn btn-primary">Checkout</a>
               </Link>
-              <Link href="/">
+              <Link legacyBehavior href="/">
                 <a className="btn btn-outline-primary">Continue Shopping</a>
               </Link>
             </div>

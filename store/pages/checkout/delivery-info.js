@@ -82,10 +82,10 @@ function DeliveryInfo() {
 
                 <div className="col-md-12 mt-4">
                   <div className="d-grid gap-2 d-flex justify-content-end">
-                    <Link href="/shopping-cart">
+                    <Link legacyBehavior href="/shopping-cart">
                       <a className="btn btn-outline-primary">Cancel</a>
                     </Link>
-                    <Link href="/checkout/payment-info">
+                    <Link legacyBehavior href="/checkout/payment-info">
                       <a className="btn btn-primary">Continue</a>
                     </Link>
                   </div>

@@ -51,16 +51,16 @@ function Footer() {
             <div className="col-md-6 col-lg-2 d-none d-md-block">
               <h5 className="text-light">Account</h5>
               <div className="vstack small gap-2">
-                <Link href="/auth/login">
+                <Link legacyBehavior href="/auth/login">
                   <a className="footer-link">User Login</a>
                 </Link>
-                <Link href="/auth/sign-up">
+                <Link legacyBehavior href="/auth/sign-up">
                   <a className="footer-link">User Register</a>
                 </Link>
-                <Link href="/account/profile">
+                <Link legacyBehavior href="/account/profile">
                   <a className="footer-link">Account Setting</a>
                 </Link>
-                <Link href="/account/current-orders">
+                <Link legacyBehavior href="/account/current-orders">
                   <a className="footer-link">My Orders</a>
                 </Link>
               </div>

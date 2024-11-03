@@ -14,18 +14,9 @@ load_dotenv(override=True)
 
 app = FastAPI()
 
-# Configure CORS
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["chrome-extension://*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
 # Configure Gemini
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-model = genai.GenerativeModel(os.getenv("OPENAI_VISION_MODEL"))
+model = genai.GenerativeModel(os.getenv("OPENAI_VISION_MODEL").split("/")[-1])
 
 
 class PreferencesUpdate(BaseModel):
@@ -82,13 +73,14 @@ async def update_preferences(update: PreferencesUpdate):
     
     Only update information relevant to e-commerce recommendations. Be as concise as possible and consolidate if possible.
     Return a JSON with the keys "personal_details", "style_preferences", and "color_preferences", each formatted as bullets.
+    Assume the user prefers the products similar to what they are searching for.
     """)
     
     response = model.generate_content(prompt)
     start_index = response.candidates[0].content.parts[0].text.find("{")
     end_index = response.candidates[0].content.parts[0].text.rfind("}") + 1
     current_preferences = json.loads(response.candidates[0].content.parts[0].text[start_index:end_index])
-    
+    print(current_preferences)
     return JSONResponse(
         status_code=200,
         content=current_preferences

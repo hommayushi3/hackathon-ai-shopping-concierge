@@ -1,8 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { getProductImage, getProductLink } from "../../lib/product";
+import { getCheckoutLink, getProductImage, getProductLink } from "../../lib/product";
+import { useRouter } from 'next/navigation'
 
 function ProductGridCard({ id, product, off }) {
+  const router = useRouter();
+
   let price = 10000;
   let percentOff;
   let offPrice = `${price}Ks`;
@@ -48,17 +51,19 @@ function ProductGridCard({ id, product, off }) {
           <h6 className="fw-semibold">{product.price}</h6>
 
           <div className="hstack gap-2">
-            <button className="btn btn-secondary text-primary flex-grow-1 d-md-block d-lg-none">
+            {/* <button className="btn btn-secondary text-primary flex-grow-1 d-md-block d-lg-none">
               <FontAwesomeIcon icon={["fas", "cart-plus"]} />
-              &nbsp;Add to cart
+              &nbsp;Buy now
             </button>
             <button className="btn btn-outline-secondary text-primary border d-md-block d-lg-none">
               <FontAwesomeIcon icon={["far", "heart"]} />
-            </button>
+            </button> */}
 
-            <button className="btn btn-sm btn-secondary text-primary flex-grow-1 d-none d-lg-block">
+            <button
+              className="btn btn-sm btn-secondary text-primary flex-grow-1 d-none d-lg-block"
+              onClick={() => router.push(getCheckoutLink(product.id))}>
               <FontAwesomeIcon icon={["fas", "cart-plus"]} />
-              &nbsp;Add to cart
+              &nbsp;Buy now
             </button>
             <button className="btn btn-sm btn-outline-secondary text-primary border d-none d-lg-block">
               <FontAwesomeIcon icon={["far", "heart"]} />

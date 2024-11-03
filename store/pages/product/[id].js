@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductRating from "../../components/product-rating";
 import ProductSimpleHorizontal from "../../components/product/product-simple-horizontal";
 import { useState, useEffect } from "react";
-import { getDb, getProductInfo, getProductImage } from "../../lib/product";
+import { getDb, getProductInfo, getProductImage, getCheckoutLink } from "../../lib/product";
 import { useRouter } from 'next/router'
 
 function ProductDetail() {
@@ -243,7 +243,7 @@ function ProductDetail() {
 
                 <div className="d-flex">
                   <a
-                    href={`/checkout/confirm-checkout?article_ids=${id}`}
+                    href={getCheckoutLink(id)}
                     className="btn btn-primary px-md-4 col col-md-auto me-2"
                   >
                     Buy now

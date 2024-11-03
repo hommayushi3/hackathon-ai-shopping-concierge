@@ -73,3 +73,7 @@ export function formatPrice(priceStr) {
 export function getProductLink(id) {
     return `/product/${id}`;
 }
+
+export function getCheckoutLink(id) {
+    return `/checkout/confirm-checkout?article_ids=${id}`;
+}

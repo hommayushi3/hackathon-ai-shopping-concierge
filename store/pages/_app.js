@@ -9,6 +9,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import Layout from "../components/layout";
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { getCheckoutLink } from "../lib/product";
 
 config.autoAddCss = false;
 library.add(fab, fas, far);
@@ -47,13 +48,19 @@ function MyApp({ Component, pageProps }) {
     function handleChainlitEvent(e) {
       const { name, args, callback } = e.detail;
       callback("You sent: " + args.msg);
-      console.log("You sent: " + JSON.stringify(args));
+      console.log(`Received chainlit event: ${name} ${JSON.stringify(args)}`);
 
       // Prepare article_ids as a query parameter if available
       const articleIds = args.article_ids ? args.article_ids.join(',') : '';
 
-      // Redirect to /explore with article_ids in the query string
-      router.push(`/explore?article_ids=${articleIds}`);
+      if (name === "recommendations") {
+        // Redirect to /explore with article_ids in the query string
+        router.push(`/explore?article_ids=${articleIds}`);
+      } else if (name === "update_cart") {
+        router.push(getCheckoutLink(articleIds));
+      } else {
+        console.error("unrecognize action " + name);
+      }
     }
 
     addChainlitCopilot();

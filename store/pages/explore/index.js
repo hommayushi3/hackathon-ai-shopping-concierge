@@ -1,7 +1,42 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductGridCard from "../../components/product/product-grid-card";
+import { useState, useEffect } from "react";
+import { getDb, getProductInfo } from "../../lib/product";
+import { useSearchParams } from 'next/navigation'
 
 function ExploreProducts() {
+  const categories = ['Ladieswear', 'Menswear', 'Sport', 'Divided', 'Baby/Children'];
+
+  const [isLoaded, setLoaded] = useState(false);
+  const [db, setResult] = useState(null);
+
+  const searchParams = useSearchParams()
+  const category = searchParams.get('cat') || 'all';
+  console.log('category: ' + category);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isLoaded) {
+        const newData = await getDb();
+        setResult(() => newData);
+        setLoaded(true);
+      }
+    };
+    fetchData().catch((e) => {
+      console.error(`failed to fetch data: ${e}`);
+    });
+  }, [db, setResult, isLoaded, setLoaded]);
+
+  let matching = [];
+  let products = [];
+  if (isLoaded) {
+    matching = Object.entries(db).map(([k, v]) => v).filter((v) => {
+      return category === 'all' || v['index_group_name'] === category;
+    });
+    products = matching.slice(0, 9).map((p) => getProductInfo(p));
+    console.log(products);
+  }
+
   return (
     <div className="vstack">
       <div className="bg-secondary">
@@ -10,14 +45,16 @@ function ExploreProducts() {
             <nav aria-label="breadcrumb col-12">
               <ol className="breadcrumb mb-1">
                 <li className="breadcrumb-item">
-                  <a href="#">All Categories</a>
+                  <a href="/explore?cat=all">All Categories</a>
                 </li>
-                <li className="breadcrumb-item">
-                  <a href="#">Electronics</a>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
+                {
+                  category !== 'all' && <li className="breadcrumb-item">
+                    <a href="#">{category}</a>
+                  </li>
+                }
+                {/* <li className="breadcrumb-item active" aria-current="page">
                   Phones & Tablets
-                </li>
+                </li> */}
               </ol>
             </nav>
           </div>
@@ -44,36 +81,16 @@ function ExploreProducts() {
                 >
                   <div className="accordion-body pt-2">
                     <div className="vstack gap-2">
-                      <a
-                        href="#"
-                        className="fw-medium link-dark text-decoration-none"
-                      >
-                        Phones & Tablets
-                      </a>
-                      <a
-                        href="#"
-                        className="fw-medium link-dark text-decoration-none"
-                      >
-                        Laptops & PC
-                      </a>
-                      <a
-                        href="#"
-                        className="fw-medium link-dark text-decoration-none"
-                      >
-                        Monitors
-                      </a>
-                      <a
-                        href="#"
-                        className="fw-medium link-dark text-decoration-none"
-                      >
-                        Game Controllers
-                      </a>
-                      <a
-                        href="#"
-                        className="fw-medium link-dark text-decoration-none"
-                      >
-                        Cables & Chargers
-                      </a>
+                      {
+                        categories.map((category) => {
+                          return (<a
+                            href={`/explore?cat=${category}`}
+                            className="fw-medium link-dark text-decoration-none"
+                          >
+                            {category}
+                          </a>);
+                        })
+                      }
                     </div>
                   </div>
                 </div>
@@ -163,7 +180,9 @@ function ExploreProducts() {
           </div>
           <div className="col-lg-9">
             <div className="hstack justify-content-between mb-3">
-              <span className="text-dark">33 Items found</span>
+              <span className="text-dark">
+                {isLoaded ? `${matching.length} items found` : "Loading..."}
+              </span>
               <div className="btn-group" role="group">
                 <button className="btn btn-outline-dark">
                   <FontAwesomeIcon icon={["fas", "sort-amount-up"]} />
@@ -174,27 +193,11 @@ function ExploreProducts() {
               </div>
             </div>
             <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-              <div className="col">
-                <ProductGridCard />
-              </div>
-              <div className="col">
-                <ProductGridCard off={10} />
-              </div>
-              <div className="col">
-                <ProductGridCard />
-              </div>
-              <div className="col">
-                <ProductGridCard />
-              </div>
-              <div className="col">
-                <ProductGridCard />
-              </div>
-              <div className="col">
-                <ProductGridCard off={25} />
-              </div>
-              <div className="col">
-                <ProductGridCard />
-              </div>
+              {products.map((product) => {
+                return <div key={product.id} className="col">
+                  <ProductGridCard id={product.id} product={product} />
+                </div>
+              })}
             </div>
 
             <nav className="float-end mt-3">

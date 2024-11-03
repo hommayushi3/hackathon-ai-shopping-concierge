@@ -3,6 +3,7 @@ import Link from "next/link";
 
 function Header({ simple, hideAuth }) {
   let title = process.env.APP_NAME;
+  const categories = ['Ladieswear', 'Menswear', 'Sport', 'Divided', 'Baby/Children'];
   return (
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom">
@@ -77,36 +78,15 @@ function Header({ simple, hideAuth }) {
             </button>
             <div className="collapse navbar-collapse" id="navbarNavDropdown">
               <ul className="navbar-nav">
-                <li className="nav-item">
-                  <Link legacyBehavior href="/explore">
-                    <a className="nav-link">All Categories</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link legacyBehavior href="/explore">
-                    <a className="nav-link">Electronics</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link legacyBehavior href="/explore">
-                    <a className="nav-link">Clothing</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link legacyBehavior href="/explore">
-                    <a className="nav-link">Furnitures</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link legacyBehavior href="/explore">
-                    <a className="nav-link">Medicines</a>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link legacyBehavior href="/explore">
-                    <a className="nav-link">Cosmetics</a>
-                  </Link>
-                </li>
+                {
+                  categories.map((category) => {
+                    return (<li className="nav-item">
+                      <Link legacyBehavior href={`/explore?cat=${category}`}>
+                        <a className="nav-link">{category}</a>
+                      </Link>
+                    </li>);
+                  })
+                }
               </ul>
               <ul className="ms-auto navbar-nav">
                 <li className="nav-item dropdown">

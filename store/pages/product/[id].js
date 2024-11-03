@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductRating from "../../components/product-rating";
 import ProductSimpleHorizontal from "../../components/product/product-simple-horizontal";
 import { useState, useEffect } from "react";
-import { getDb, formatPrice, getProductImage } from "../../lib/product";
+import { getDb, getProductInfo, getProductImage } from "../../lib/product";
 import { useRouter } from 'next/router'
 
 function ProductDetail() {
@@ -31,18 +31,7 @@ function ProductDetail() {
     });
   }, [product, setResult, isLoaded, setLoaded, id]);
 
-  // default values
-  let productName = "";
-  let category = "";
-  let price = "";
-  let description = "";
-  // Load real values
-  if (isLoaded) {
-    productName = product['prod_name'];
-    category = product['index_group_name'];
-    price = formatPrice(product['price']);
-    description = product['detail_desc'];
-  }
+  const info = getProductInfo(product);
 
   return (
     <div className="vstack">
@@ -52,13 +41,13 @@ function ProductDetail() {
             <nav aria-label="breadcrumb col-12">
               <ol className="breadcrumb mb-1">
                 <li className="breadcrumb-item">
-                  <a href="#">All Categories</a>
+                  <a href="/explore">All Categories</a>
                 </li>
                 <li className="breadcrumb-item">
-                  <a href="#">{category}</a>
+                  <a href={`/explore?cat=${info.category}`}>{info.category}</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
-                  {productName}
+                  {info.productName}
                 </li>
               </ol>
             </nav>
@@ -71,14 +60,19 @@ function ProductDetail() {
             <div className="col-lg-5">
               <div className="row">
                 <div className="col-12">
-                  <div className="ratio ratio-1x1">
+                  <div justify-content-center>
                     <img
-                      className="rounded"
-                      src={getProductImage(id)}
-                      width={300}
-                      height={300}
-                      alt="Product image."
-                    />
+                        className="rounded"
+                        src={getProductImage(id)}
+                        style={{
+                          "max-width": "fit-content",
+                          "align-items": "center",
+                          "justify-content": "center"
+                        }}
+                        width={300}
+                        // height={300}
+                        alt="Product image."
+                      />
                   </div>
                 </div>
               </div>
@@ -109,7 +103,7 @@ function ProductDetail() {
             <div className="col-lg-7">
               <div className="d-flex">
                 <div className="d-inline h2 mb-0 fw-semibold me-3">
-                  {productName}
+                  {info.productName}
                 </div>
                 <div className="ms-auto">
                   <button
@@ -132,15 +126,15 @@ function ProductDetail() {
                     &nbsp;In Stock
                   </span>
                 </div>
-                <h4 className="fw-semibold">{price}</h4>
+                <h4 className="fw-semibold">{info.price}</h4>
                 <p className="fw-light">
-                  {description}
+                  {info.description}
                 </p>
                 <dl className="row mb-0">
                   <dt className="col-sm-3 fw-semibold">Product code</dt>
                   <dd className="col-sm-9">{id}</dd>
                   <dt className="col-sm-3 fw-semibold">Category</dt>
-                  <dd className="col-sm-9">{category}</dd>
+                  <dd className="col-sm-9">{info.category}</dd>
                   <dt className="col-sm-3 fw-semibold">Delivery</dt>
                   <dd className="col-sm-9">San Francisco, CA</dd>
                 </dl>

@@ -22,10 +22,34 @@ export async function getProductData(productId) {
     const db = await getDb();
     const data = db[productId];
     if (!data) {
-        console.log(`${productId} not found`);
+        console.error(`${productId} not found`);
         return {};
     }
     return data;
+}
+
+export function getProductInfo(product) {
+  // default values
+  let id = "0";
+  let productName = "";
+  let category = "";
+  let price = "";
+  let description = "";
+  // Load real values
+  if (product && Object.keys(product).length) {
+    id = product['article_id'];
+    productName = product['prod_name'];
+    category = product['index_group_name'];
+    price = formatPrice(product['price']);
+    description = product['detail_desc'];
+  }
+  return {
+    id: id,
+    productName: productName,
+    category: category,
+    price: price,
+    description: description
+  }
 }
 
 export async function getProductName(productId) {
@@ -38,4 +62,8 @@ export function getProductImage(productId) {
 
 export function formatPrice(priceStr) {
     return `$${Number(priceStr).toFixed(2)}`;
+}
+
+export function getProductLink(id) {
+    return `/product/${id}`;
 }

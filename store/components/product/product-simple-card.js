@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductRating from "../product-rating";
-import {getProductImage} from "../../lib/product";
+import {getProductImage, getProductLink} from "../../lib/product";
 
 function ProductSimpleCard({ id, productName, price }) {
   return (
@@ -14,7 +14,7 @@ function ProductSimpleCard({ id, productName, price }) {
         />
       </div>
       <div className="card-body">
-        <Link legacyBehavior href={`/product/${id}`}>
+        <Link legacyBehavior href={getProductLink(id)}>
           <a className="mb-1 text-dark text-decoration-none stretched-link">
             {productName}
           </a>

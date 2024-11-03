@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { getProductImage, getProductLink } from "../../lib/product";
 
-function ProductGridCard({ id, title, off }) {
+function ProductGridCard({ id, product, off }) {
   let price = 10000;
   let percentOff;
   let offPrice = `${price}Ks`;
@@ -25,14 +26,12 @@ function ProductGridCard({ id, title, off }) {
   }
   return (
     <div className="card h-100 border-0 shadow-sm">
-      <Link legacyBehavior href="/product/1">
+      <Link legacyBehavior href={getProductLink(id)}>
         <a>
           <div className="ratio ratio-1x1">
             <img
               className="card-img-top "
-              src={`https://source.unsplash.com/random/200x240?random=${Math.floor(
-                Math.random() * 100
-              )}`}
+              src={getProductImage(id)}
               alt="Product image."
               style={{ objectFit: "cover" }}
             />
@@ -42,16 +41,16 @@ function ProductGridCard({ id, title, off }) {
       </Link>
       <div className="card-body">
         <div className="vstack gap-2">
-          <Link legacyBehavior href="/product/1">
-            <a className="text-dark text-decoration-none">Product name here</a>
+          <Link legacyBehavior href={getProductLink(id)}>
+            <a className="text-dark text-decoration-none">{product.productName}</a>
           </Link>
 
-          <h6 className="fw-semibold">{offPrice}</h6>
+          <h6 className="fw-semibold">{product.price}</h6>
 
           <div className="hstack gap-2">
             <button className="btn btn-secondary text-primary flex-grow-1 d-md-block d-lg-none">
               <FontAwesomeIcon icon={["fas", "cart-plus"]} />
-              &nbsp;Add to card
+              &nbsp;Add to cart
             </button>
             <button className="btn btn-outline-secondary text-primary border d-md-block d-lg-none">
               <FontAwesomeIcon icon={["far", "heart"]} />
@@ -59,7 +58,7 @@ function ProductGridCard({ id, title, off }) {
 
             <button className="btn btn-sm btn-secondary text-primary flex-grow-1 d-none d-lg-block">
               <FontAwesomeIcon icon={["fas", "cart-plus"]} />
-              &nbsp;Add to card
+              &nbsp;Add to cart
             </button>
             <button className="btn btn-sm btn-outline-secondary text-primary border d-none d-lg-block">
               <FontAwesomeIcon icon={["far", "heart"]} />

@@ -6,6 +6,25 @@ import { useSearchParams } from 'next/navigation'
 
 function ExploreProducts() {
   const categories = ['Ladieswear', 'Menswear', 'Sport', 'Divided', 'Baby/Children'];
+  const productTypes = [
+    'Garment Upper body',
+    'Garment Lower body',
+    'Accessories',
+    'Socks & Tights',
+    'Underwear',
+    'Shoes',
+    'Garment Full body',
+    'Nightwear',
+    'Swimwear',
+    // 'Unknown',
+    // 'Bags',
+    // 'Items',
+    // 'Furniture'
+  ];
+  const typeState = new Map();
+  for (let pType of productTypes) {
+    typeState[pType] = useState(true);
+  }
 
   const [isLoaded, setLoaded] = useState(false);
   const [db, setResult] = useState(null);
@@ -29,13 +48,29 @@ function ExploreProducts() {
 
   let matching = [];
   let products = [];
-  if (isLoaded) {
-    matching = Object.entries(db).map(([k, v]) => v).filter((v) => {
-      return category === 'all' || v['index_group_name'] === category;
-    });
-    products = matching.slice(0, 9).map((p) => getProductInfo(p));
-    console.log(products);
-  }
+
+  const findMatching = () => {
+    const cols = ['product_group_name', 'product_type_name', 'section_name'];
+    const s = cols.map((col) => new Set());
+    if (isLoaded) {
+      matching = Object.entries(db).map(([k, v]) => v).filter((v) => {
+        const categoryMatch = category === 'all' || v['index_group_name'] === category;
+        const state = typeState[v['product_group_name']];
+        const typeMatch = state ? state[0] : false;
+        return categoryMatch && typeMatch;
+      });
+      products = matching.slice(0, 9).map((p) => getProductInfo(p));
+      // console.log(products);
+      // console.log(s);
+    }
+  };
+  findMatching();
+
+  const onTypeChange = (pType, e) => {
+    typeState[pType][1](e.target.checked);
+    // console.log(typeState);
+    findMatching();
+  };
 
   return (
     <div className="vstack">
@@ -84,6 +119,7 @@ function ExploreProducts() {
                       {
                         categories.map((category) => {
                           return (<a
+                            key={`a-${category}`}
                             href={`/explore?cat=${category}`}
                             className="fw-medium link-dark text-decoration-none"
                           >
@@ -103,7 +139,7 @@ function ExploreProducts() {
                     data-bs-target="#collapseTwo"
                     aria-expanded="true"
                   >
-                    Brands
+                    Product type
                   </button>
                 </h2>
                 <div
@@ -112,34 +148,22 @@ function ExploreProducts() {
                 >
                   <div className="accordion-body pt-2">
                     <div className="vstack gap-2">
-                      <div className="d-flex gap-2">
-                        <input type="checkbox" className="form-check-input" />
-                        <label className="fw-medium flex-grow-1">Apple</label>
-                        <span className="badge bg-default rounded-pill my-auto mb-0 text-dark">
-                          50
-                        </span>
-                      </div>
-                      <div className="d-flex gap-2">
-                        <input type="checkbox" className="form-check-input" />
-                        <label className="fw-medium flex-grow-1">Samsung</label>
-                        <span className="badge bg-default rounded-pill my-auto mb-0 text-dark">
-                          100
-                        </span>
-                      </div>
-                      <div className="d-flex gap-2">
-                        <input type="checkbox" className="form-check-input" />
-                        <label className="fw-medium flex-grow-1">Sony</label>
-                        <span className="badge bg-default rounded-pill my-auto mb-0 text-dark">
-                          30
-                        </span>
-                      </div>
-                      <div className="d-flex gap-2">
-                        <input type="checkbox" className="form-check-input" />
-                        <label className="fw-medium flex-grow-1">AOC</label>
-                        <span className="badge bg-default rounded-pill my-auto mb-0 text-dark">
-                          60
-                        </span>
-                      </div>
+                      {
+                        productTypes.map((pType) => {
+                          return (<div key={`div-${pType}`} className="d-flex gap-2">
+                            <input
+                              id={`input-${pType}`}
+                              type="checkbox"
+                              className="form-check-input"
+                              checked={typeState[pType][0]}
+                              onChange={(e) => onTypeChange(pType, e)} />
+                            <label className="fw-medium flex-grow-1">{pType}</label>
+                            <span className="badge bg-default rounded-pill my-auto mb-0 text-dark">
+                              50
+                            </span>
+                          </div>);
+                        })
+                      }
                     </div>
                   </div>
                 </div>

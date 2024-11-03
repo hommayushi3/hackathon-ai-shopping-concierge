@@ -76,14 +76,14 @@ class SearchByTextQuery(BaseModel):
         cl.user_session.set("latest_products", results["matches"])
 
         formatted_result = generate_product_recommendations_message(results)
-        asyncio.create_task(cl.CopilotFunction(
+        await cl.CopilotFunction(
             name="recommendations",
             args={
                 "query": query,
                 "filters": filt,
                 "article_ids": formatted_result["article_ids"]
             }
-        ).acall())
+        ).acall()
         for message in formatted_result["messages"]:
             await message.send()
 

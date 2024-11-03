@@ -53,12 +53,10 @@ class AddToCart(BaseModel):
 
         product_ids = cl.user_session.get("cart_article_ids", []) + [product["metadata"]["article_id"]]
         cl.user_session.set("cart_article_ids", product_ids)
-        asyncio.create_task(
-            cl.CopilotFunction(
-                name="update_cart",
-                args={"article_ids": product_ids}
-            ).acall()
-        )
+        await cl.CopilotFunction(
+            name="update_cart",
+            args={"article_ids": product_ids}
+        ).acall()
         await cl.Message(content=f"Added {product['metadata']['prod_name']} to cart!").send()
         
         return "Successfully added to cart!"

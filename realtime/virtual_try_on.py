@@ -56,6 +56,7 @@ class VirtualTryOn(BaseModel):
         category: str
     ) -> dict:
 
+        print('trying on')
         latest_products = cl.user_session.get("latest_products")
         index = await vision_model.identify_previous_recommendation(
             description=description_of_previous_recommendation,
@@ -63,13 +64,12 @@ class VirtualTryOn(BaseModel):
         )
         product = latest_products[index]
         cl.user_session.set("latest_try_on_product", product)
-        print("Identified recommendation")
-        asyncio.create_task(
-            cl.CopilotFunction(
-                name="try_on",
-                args={"article_ids": [product["metadata"]["article_id"]]}
-            ).acall()
-        )
+        print('sending try on task')
+        await cl.CopilotFunction(
+            name="try_on",
+            args={"article_ids": [product["metadata"]["article_id"]]}
+        ).acall()
+        print('sent try on task.')
 
         cloth_image = product["metadata"]["image"]
 

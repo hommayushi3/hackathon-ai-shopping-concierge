@@ -33,22 +33,16 @@ class PreferencesUpdate(BaseModel):
     Always use this tool in parallel along with any product search query to update the database with the user's latest details/preferences if
     you learn anything new about the user. This will help us provide better recommendations in the future.
     """
-    personal_details_update: Optional[str] = None
-    style_preference_update: Optional[str] = None
-    color_preference_update: Optional[str] = None
+    query: str
 
     @staticmethod
     async def handler(
-        personal_details_update: Optional[str] = None,
-        style_preference_update: Optional[str] = None,
-        color_preference_update: Optional[str] = None,
+        query: str,
     ) -> dict:
         response = requests.post(
             "http://localhost:8081/update_preferences",
             json={
-                "personal_details_update": personal_details_update,
-                "style_preference_update": style_preference_update,
-                "color_preference_update": color_preference_update,
+                "query": query
             },
             headers={"Content-Type": "application/json"},
         )
@@ -79,15 +73,12 @@ async def update_preferences(update: PreferencesUpdate):
     # Generate updates using Gemini for any changed preferences
     prompt = cleandoc(f"""
     Please update the personal details, style preferences, and color preferences based
-    on the current state and the following updates:
+    on the current state and the user's most recent query:
     
     Current State:
     {current_preferences}
 
-    Updates:
-    Personal Details: {update.personal_details_update}
-    Style Preferences: {update.style_preference_update}
-    Color Preferences: {update.color_preference_update}
+    Most Recent Query: {update.query}
     
     Only update information relevant to e-commerce recommendations. Be as concise as possible and consolidate if possible.
     Return a JSON with the keys "personal_details", "style_preferences", and "color_preferences", each formatted as bullets.

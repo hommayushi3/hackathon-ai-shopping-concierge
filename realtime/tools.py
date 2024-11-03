@@ -22,5 +22,5 @@ def pydantic_to_tool_schema(pydantic_model):
     )
 
 
-tool_models = [SearchByTextQuery, SearchByImageQuery, VirtualTryOn, PreferencesUpdate]
+tool_models = [SearchByTextQuery, SearchByImageQuery, VirtualTryOn]
 tools = list(map(pydantic_to_tool_schema, tool_models))

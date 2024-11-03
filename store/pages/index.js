@@ -54,27 +54,17 @@ export default function Home() {
                 );
               }}
             >
-              <div className="ratio ratio-21x9">
-                <img
-                  src="/images/online-shopping.jpg"
-                  alt="Cover image"
-                  className="rounded"
-                />
-              </div>
-              <div className="ratio ratio-21x9">
-                <img
-                  src="/images/online-shopping.jpg"
-                  alt="Cover image"
-                  className="rounded"
-                />
-              </div>
-              <div className="ratio ratio-21x9">
-                <img
-                  src="/images/online-shopping.jpg"
-                  alt="Cover image"
-                  className="rounded"
-                />
-              </div>
+              {
+                [1, 2, 3].map((i) => {
+                  return (<div>
+                    <img
+                      src={`/data/front_page_slider_${i}.jpg`}
+                      alt="Cover image"
+                      className="rounded"
+                    />
+                  </div>)
+                })
+              }
             </Carousel>
           </div>
         </div>

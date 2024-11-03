@@ -6,10 +6,10 @@ let db = new Map();
 export async function getDb() {
     if (db.size === 0) {
         console.log("reading db");
-        const filePath = `${DATA_PATH}/product_catalog.csv`;
+        const filePath = `${DATA_PATH}/product_catalog_v2.csv`;
         const resp = await fetch(filePath);
         const csv = await resp.text();
-        const records = parse(csv, {columns: true});
+        const records = parse(csv, { columns: true });
         console.log(`Loaded ${records.length} records`)
         for (const record of records) {
             db[record.article_id] = record;
@@ -25,7 +25,7 @@ export async function getProductData(productId) {
         console.log(`${productId} not found`);
         return {};
     }
-    return data;    
+    return data;
 }
 
 export async function getProductName(productId) {
@@ -34,4 +34,8 @@ export async function getProductName(productId) {
 
 export function getProductImage(productId) {
     return `${DATA_PATH}/product_catalog_images/0${productId}.jpg`;
+}
+
+export function formatPrice(priceStr) {
+    return Number(priceStr).toFixed(2);
 }

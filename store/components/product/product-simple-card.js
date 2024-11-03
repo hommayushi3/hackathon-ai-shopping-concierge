@@ -2,7 +2,7 @@ import Link from "next/link";
 import ProductRating from "../product-rating";
 import {getProductImage} from "../../lib/product";
 
-function ProductSimpleCard({ id, productName }) {
+function ProductSimpleCard({ id, productName, price }) {
   return (
     <div className="card h-100 border-0 shadow-sm">
       <div className="ratio ratio-1x1">
@@ -22,7 +22,7 @@ function ProductSimpleCard({ id, productName }) {
 
         <ProductRating />
 
-        <h6 className="mb-0 fw-semibold mt-2">15000 Ks</h6>
+        <h6 className="mb-0 fw-semibold mt-2">${price}</h6>
       </div>
     </div>
   );

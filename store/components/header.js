@@ -36,20 +36,25 @@ function Header({ simple, hideAuth }) {
             </form>
           </div>
           <div className="d-flex">
-            {!hideAuth && (
-              <>
-                <Link legacyBehavior href="/auth/login">
-                  <a className="btn btn-outline-primary d-none d-md-block">
-                    Login
-                  </a>
-                </Link>
-                <Link legacyBehavior href="/auth/sign-up">
-                  <a className="btn btn-primary d-none d-md-block ms-2">
-                    Sign up
-                  </a>
-                </Link>
-              </>
-            )}
+            <img src="/data/person-icon1.png"
+              width={30}
+              height={30}
+            />
+            <div>
+              <div className="position-relative ms-2 fw-normal" style={{ "vertical-align": "middle" }}>
+                Welcome, Patrick
+              </div>
+              {/* <Link legacyBehavior href="/auth/login">
+                <a className="btn btn-outline-primary d-none d-md-block">
+                  Login
+                </a>
+              </Link>
+              <Link legacyBehavior href="/auth/sign-up">
+                <a className="btn btn-primary d-none d-md-block ms-2">
+                  Sign up
+                </a>
+              </Link> */}
+            </div>
             {/* <Link legacyBehavior href="/shopping-cart"> */}
             {/* <a className="btn btn-light border position-relative ms-2 fw-normal"> */}
             <div className="btn btn-light border position-relative ms-2 fw-normal">

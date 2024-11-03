@@ -1,3 +1,4 @@
+import asyncio
 import os
 from enum import Enum
 
@@ -60,8 +61,16 @@ class VirtualTryOn(BaseModel):
             description=description_of_previous_recommendation,
             products=latest_products
         )
-        cl.user_session.set("latest_try_on_product", latest_products[index])
-        cloth_image = latest_products[index]["metadata"]["image"]
+        product = latest_products[index]
+        cl.user_session.set("latest_try_on_product", product)
+        await asyncio.create_task(
+            cl.CopilotFunction(
+                name="try_on",
+                args={"article_ids": [product["metadata"]["article_id"]]}
+            ).acall()
+        )
+
+        cloth_image = product["metadata"]["image"]
 
         model_image = image_to_data_uri(MODEL_IMAGE_PATH).split(",")[1]
 
@@ -80,12 +89,12 @@ class VirtualTryOn(BaseModel):
 
         elements = [
             cl.Image(
-                name=f'Virtual Try On {latest_products[index]["metadata"]["prod_name"]}',
+                name=f'Virtual Try On {product["metadata"]["prod_name"]}',
                 content=resize_to_orig_size(response.content, (1191, 2014)),
                 display="inline",
                 size="large",
             )
         ]
-        await cl.Message(content=f"Virtual Try On {latest_products[index]['metadata']['prod_name']}", elements=elements).send()
+        await cl.Message(content=f"Virtual Try On {product['metadata']['prod_name']}", elements=elements).send()
 
         return "Virtual Try-On completed successfully! Tell the user how good they look as if you can see the picture, being as specific as possible! Then, ask if they would like to buy the product."

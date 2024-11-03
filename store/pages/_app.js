@@ -9,7 +9,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import Layout from "../components/layout";
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { getCheckoutLink } from "../lib/product";
+import { getCheckoutLink, getProductLink } from "../lib/product";
 
 config.autoAddCss = false;
 library.add(fab, fas, far);
@@ -58,6 +58,8 @@ function MyApp({ Component, pageProps }) {
         router.push(`/explore?article_ids=${articleIds}`);
       } else if (name === "update_cart") {
         router.push(getCheckoutLink(articleIds));
+      } else if (name === "try_on") {
+        router.push(getProductLink(articleIds));
       } else {
         console.error("unrecognize action " + name);
       }

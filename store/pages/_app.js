@@ -17,13 +17,17 @@ if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap.bundle.min.js");
 }
 
+let chainlitInitialized = false; // Track initialization status
+
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
     function addChainlitCopilot() {
-      // Check if the script is already added to avoid duplicating it
-      if (!document.querySelector(`script[src="http://localhost:8000/copilot/index.js"]`)) {
+      if (!chainlitInitialized) {
+        chainlitInitialized = true; // Mark Chainlit as initialized
+
+        // Add the script only once
         const myScript = document.createElement('script');
         myScript.src = "http://localhost:8000/copilot/index.js";
         document.body.appendChild(myScript);
@@ -55,12 +59,8 @@ function MyApp({ Component, pageProps }) {
     addChainlitCopilot();
 
     return () => {
-      // Remove the event listener on unmount
+      // Clean up event listener only
       window.removeEventListener("chainlit-call-fn", handleChainlitEvent);
-
-      // Remove the script from the document
-      const scriptElement = document.querySelector(`script[src="http://localhost:8000/copilot/index.js"]`);
-      if (scriptElement) document.body.removeChild(scriptElement);
     };
   }, [router]);
 

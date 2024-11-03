@@ -64,7 +64,7 @@ function ProductDetail() {
                     <img
                       className="rounded"
                       src={getProductImage(id)}
-                      width={300}
+                      width="500"
                       // height={300}
                       alt="Product image."
                     />

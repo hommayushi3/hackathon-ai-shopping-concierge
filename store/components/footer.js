@@ -11,26 +11,25 @@ function Footer() {
               <h5 className="text-light">Contact us</h5>
               <div className="vstack gap-1">
                 <p className="mb-2 text-light text-opacity-75 small">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer in feugiat lorem.
+                We're here to help! Reach out via email, phone, or live chat for prompt assistance with any questions about your order or our products.
                 </p>
                 <small className="d-flex text-light text-opacity-75 gap-2">
                   <FontAwesomeIcon
                     icon={["fas", "map-marker"]}
                     className="mt-1"
                   />
-                  <div>123 Mocha Street, Milk Township, Yangon.</div>
+                  <div>150 California Street, Suite 800, San Francisco, CA 94111</div>
                 </small>
                 <small className="d-flex text-light text-opacity-75 gap-2">
                   <FontAwesomeIcon
                     icon={["fas", "envelope"]}
                     className="mt-1"
                   />
-                  <div>info@domain.com</div>
+                  <div>info@uniqbro.com</div>
                 </small>
                 <small className="d-flex text-light text-opacity-75 gap-2">
                   <FontAwesomeIcon icon={["fas", "phone"]} className="mt-1" />
-                  <div>(+95) 9 12345678</div>
+                  <div>(415) 555-0123</div>
                 </small>
               </div>
             </div>
@@ -97,7 +96,7 @@ function Footer() {
       <footer className="py-4 bg-primary-dark">
         <div className="container d-flex">
           <span className="text-light text-opacity-50 my-auto">
-            &copy; {new Date().getFullYear()} Mocha Mart
+            &copy; {new Date().getFullYear()} Uniqbro
           </span>
           <div className="ms-auto hstack gap-4">
             <a href="#" className="ms-auto link-light">

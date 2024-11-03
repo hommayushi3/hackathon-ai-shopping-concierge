@@ -14,7 +14,7 @@ function Header({ simple, hideAuth }) {
                 className="d-inline-block"
               /> */}
               <span className="ms-2 mb-0 h4 text-primary fw-bold">
-                Mocha Mart
+                Uniqbro
               </span>
             </a>
           </Link>

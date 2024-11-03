@@ -1,3 +1,5 @@
 # Hackathon AI Shopping Concierge
 
-Press P to start!
+![](static/images/logo.jpg)
+
+Press P to start talking with me!

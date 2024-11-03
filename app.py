@@ -65,7 +65,12 @@ async def setup_openai_realtime():
 @cl.on_chat_start
 async def start():
     await cl.Message(
-        content="Press `P` or click the microphone to start chatting! Feel free to send images in the chat as well!"
+        content="Click the microphone to start chatting with me!",
+        elements=[cl.Image(
+            path="static/images/logo.jpg",
+            display="inline",
+            size="medium"
+        )]
     ).send()
     await setup_openai_realtime()
     await setup_openai_vision()

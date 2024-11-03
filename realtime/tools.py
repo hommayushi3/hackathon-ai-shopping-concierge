@@ -59,7 +59,7 @@ class AddToCart(BaseModel):
                 args={"article_ids": product_ids}
             ).acall()
         )
-        cl.Message(content=f"Added {product['metadata']['prod_name']} to cart!").send()
+        await cl.Message(content=f"Added {product['metadata']['prod_name']} to cart!").send()
         
         return "Successfully added to cart!"
 

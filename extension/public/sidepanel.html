@@ -1,57 +1,124 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>Preferences Manager</title>
   <style>
+    :root {
+      --primary-blue: #4285f4;
+      --bg-gray: #f8f9fa;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --border-color: #dadce0;
+      --card-bg: #ffffff;
+      --border-radius: 16px;
+    }
+
     body {
-        width: 300px;
-        padding: 20px;
-        font-family: Arial, sans-serif;
+      width: 300px;
+      padding: 20px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-gray);
+      margin: 0;
+      color: var(--text-primary);
     }
+
+    h1 {
+      font-size: 24px;
+      color: var(--primary-blue);
+      margin: 0 0 24px 0;
+      font-weight: 500;
+    }
+
     .section {
-        margin-bottom: 20px;
-        padding: 15px;
-        border-radius: 8px;
-        background-color: #f5f5f5;
+      margin-bottom: 24px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      overflow: hidden;
     }
-    h2 {
-        margin-top: 0;
-        color: #333;
-        font-size: 1.2em;
+
+    .section-header {
+      padding: 16px 20px;
+      margin: 0;
+      font-size: 18px;
+      color: var(--text-primary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border-color);
     }
-    ul {
-        list-style-type: none;
-        padding-left: 0;
+
+    .section-content {
+      padding: 12px 20px;
     }
-    li {
-        margin: 8px 0;
-        padding: 8px;
-        background-color: white;
-        border-radius: 4px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    .detail-item {
+      margin: 8px 0;
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.5;
     }
-    .loading {
-        display: none;
-        color: #666;
-        font-style: italic;
+
+    /* Style preferences specific styling */
+    .style-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .style-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    .style-list li:before {
+      content: "-";
+      color: var(--text-secondary);
+      margin-right: 8px;
+    }
+
+    .style-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* Color preferences styling */
+    .color-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
 <body>
-  <div id="loading" class="loading">Updating preferences...</div>
+  <h1>Patrick's Preferences</h1>
   
   <div class="section">
-      <h2>Personal Details</h2>
-      <ul id="personal-details"></ul>
+    <h2 class="section-header">Personal Details</h2>
+    <div class="section-content">
+      <div class="detail-item">Name: Patrick Tan</div>
+      <div class="detail-item">Birthdate: 11/03</div>
+    </div>
   </div>
   
   <div class="section">
-      <h2>Style Preferences</h2>
-      <ul id="style-preferences"></ul>
+    <h2 class="section-header">Style Preferences</h2>
+    <div class="section-content">
+      <ul class="style-list">
+        <li>Skinny Jeans</li>
+        <li>Ripped Jeans</li>
+        <li>Men's Fall Styles</li>
+        <li>T-shirts</li>
+      </ul>
+    </div>
   </div>
   
   <div class="section">
-      <h2>Color Preferences</h2>
-      <ul id="color-preferences"></ul>
+    <h2 class="section-header">Color Preferences</h2>
+    <div class="section-content">
+      <div class="detail-item color-item">
+        Favorite Color: Dark Blue
+      </div>
+    </div>
   </div>
 
   <script src="sidepanel.js"></script>

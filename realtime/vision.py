@@ -88,9 +88,9 @@ def image_to_data_uri(image: str) -> str:
 
 
 class VisionModel:
-    def __init__(self):
+    def __init__(self, model_name: str = None):
         self.client = acompletion
-        self.model_name = os.getenv("OPENAI_VISION_MODEL")
+        self.model_name = model_name or os.getenv("OPENAI_VISION_MODEL")
 
     async def generate_image_description(self, image: Image.Image):
         """
@@ -207,6 +207,7 @@ class VisionModel:
         result = await acompletion(
             model=self.model_name,
             temperature=0,
+            max_completion_tokens=10,
             messages=[
                 {
                     "role": "system",
@@ -232,8 +233,7 @@ class VisionModel:
                     ]
                 },
             ],
-            safety_settings=SAFETY_SETTINGS,
-            response_format=IdentifyPreviousRecommendationIndex
+            safety_settings=SAFETY_SETTINGS
         )
         try:
             return int(re.findall(r'\d', result.choices[0].message.content)[0]) - 1

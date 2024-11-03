@@ -25,7 +25,7 @@ app = FastAPI()
 
 # Configure Gemini
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-model = genai.GenerativeModel('gemini-1.5-flash-002')
+model = genai.GenerativeModel(os.getenv("OPENAI_VISION_MODEL"))
 
 
 class PreferencesUpdate(BaseModel):

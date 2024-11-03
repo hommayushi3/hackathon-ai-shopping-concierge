@@ -8,7 +8,6 @@ const sections = {
     stylePreferences: document.getElementById('style-preferences'),
     colorPreferences: document.getElementById('color-preferences')
 };
-const loadingIndicator = document.getElementById('loading');
 
 // Function to update the UI with new preferences
 function updateUI(data) {
@@ -28,15 +27,12 @@ function updateUI(data) {
 // Function to fetch updates from the API
 async function fetchUpdates() {
     try {
-        loadingIndicator.style.display = 'block';
         const response = await fetch(API_URL);
         const data = await response.json();
         console.log('Fetched updates:', data);
         updateUI(data);
     } catch (error) {
         console.error('Error fetching updates:', error);
-    } finally {
-        loadingIndicator.style.display = 'none';
     }
 }
 

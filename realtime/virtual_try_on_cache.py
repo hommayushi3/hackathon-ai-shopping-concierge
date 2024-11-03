@@ -1,12 +1,12 @@
-import json
+from json import dumps, loads
 import hashlib
 import requests
 import redis
 from typing import Dict, Any, Optional
-from datetime import timedelta
+import os
 import zlib
 
-REDIS_URL = "redis://redis-11713.c60.us-west-1-2.ec2.redns.redis-cloud.com:11713"
+REDIS_URL = "redis-11713.c60.us-west-1-2.ec2.redns.redis-cloud.com"
 
 
 class RedisCache:
@@ -29,8 +29,11 @@ class RedisCache:
             max_item_size: Maximum size for cached items (bytes)
         """
         # Use a single connection pool to stay within connection limits
-        self.redis_client = redis.from_url(
-            redis_url,
+        self.redis_client = redis.Redis(
+            host=redis_url,
+            port=11713,
+            username=os.getenv("REDIS_USERNAME"),
+            password=os.getenv("REDIS_PASSWORD"),
             decode_responses=False,  # Need binary for compression
             max_connections=5  # Keep pool small for free tier
         )
@@ -49,7 +52,7 @@ class RedisCache:
             'data': {k: v for k, v in data.items() if k not in ['cloth_image', 'base64']},
             'headers': headers_copy
         }
-        return f"{self.prefix}{hashlib.md5(json.dumps(cache_data, sort_keys=True).encode()).hexdigest()}"
+        return f"{self.prefix}{hashlib.md5(dumps(cache_data, sort_keys=True).encode()).hexdigest()}"
 
     def _compress_data(self, data: bytes) -> bytes:
         """Compress data with a flag prefix."""
@@ -69,8 +72,10 @@ class RedisCache:
                 return None
                 
             decompressed = self._decompress_data(data)
-            return json.loads(decompressed)
+            return loads(decompressed)
         except Exception:
+            import traceback
+            traceback.print_exc()
             return None
 
     def cache_response(
@@ -81,7 +86,7 @@ class RedisCache:
         """Cache response with compression if needed."""
         try:
             # Serialize the response data
-            data = json.dumps(response_data).encode()
+            data = dumps(response_data).encode()
             
             # Skip if data is too large
             if len(data) > self.max_item_size:
@@ -122,7 +127,7 @@ class RedisCache:
         cached_response = self.get_cached_response(cache_key)
         if cached_response is not None:
             response = requests.Response()
-            response._content = json.dumps(cached_response).encode()
+            response._content = dumps(cached_response).encode()
             response.status_code = 200
             return response
         
@@ -135,6 +140,8 @@ class RedisCache:
                 response_data = response.json()
                 self.cache_response(cache_key, response_data)
             except Exception:
+                import traceback
+                traceback.print_exc()
                 pass
         
         return response
@@ -178,3 +185,33 @@ class RedisCache:
             }
         except Exception:
             return {}
+
+
+if __name__ == '__main__':
+    from realtime.vision import image_to_data_uri
+    from realtime.virtual_try_on import MODEL_IMAGE_PATH, SEGMIND_API_BASE
+
+    cloth_image = "data/product_catalog_images/0108775015.jpg"
+    category = "Upper body"
+    num_inference_steps = 35
+    guidance_scale = 2
+    base64 = True
+    seed = 0
+
+    SEGMIND_API_KEY = os.getenv("SEGMIND_API_KEY")
+    redis_cache = RedisCache()
+    model_image = image_to_data_uri(MODEL_IMAGE_PATH).split(",")[1]
+
+    data = {
+        "model_image": model_image,
+        "cloth_image": image_to_data_uri(cloth_image).split(",")[1],
+        "category": category,
+        "num_inference_steps": num_inference_steps,
+        "guidance_scale": guidance_scale,
+        "base64": base64
+    }
+    if seed is not None:
+        data["seed"] = seed
+    headers = {'x-api-key': SEGMIND_API_KEY}
+    response = redis_cache.make_cached_request(SEGMIND_API_BASE, json=data, headers=headers)
+    # print(response.json())

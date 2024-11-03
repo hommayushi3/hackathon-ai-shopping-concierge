@@ -60,9 +60,9 @@ function Header({ simple, hideAuth }) {
             <div className="btn btn-light border position-relative ms-2 fw-normal">
               <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
               &nbsp;Cart
-              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-auto">
+              {/* <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-auto">
                 3
-              </span>
+              </span> */}
               {/* </a> */}
             </div>
             {/* </Link> */}

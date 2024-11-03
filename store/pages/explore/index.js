@@ -39,8 +39,8 @@ function ExploreProducts() {
       try {
         if (!isLoaded) {
           const newData = await getDb();
-          setResult(() => newData);  
-          setLoaded(true);  
+          setResult(() => newData);
+          setLoaded(true);
         }
       } catch (e) {
         console.error(`failed to fetch data: ${e}`);

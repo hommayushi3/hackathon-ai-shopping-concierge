@@ -29,27 +29,33 @@ export async function getProductData(productId) {
 }
 
 export function getProductInfo(product) {
-  // default values
-  let id = "0";
-  let productName = "";
-  let category = "";
-  let price = "";
-  let description = "";
-  // Load real values
-  if (product && Object.keys(product).length) {
-    id = product['article_id'];
-    productName = product['prod_name'];
-    category = product['index_group_name'];
-    price = formatPrice(product['price']);
-    description = product['detail_desc'];
-  }
-  return {
-    id: id,
-    productName: productName,
-    category: category,
-    price: price,
-    description: description
-  }
+    // default values
+    let id = "0";
+    let productName = "";
+    let category = "";
+    let price = "";
+    let priceNum = 0;
+    let description = "";
+    let color = "";
+    // Load real values
+    if (product && Object.keys(product).length) {
+        id = product['article_id'];
+        productName = product['prod_name'];
+        category = product['index_group_name'];
+        price = formatPrice(product['price']);
+        priceNum = Number(product['price']);
+        description = product['detail_desc'];
+        color = product['colour_group_name'];
+    }
+    return {
+        id: id,
+        productName: productName,
+        category: category,
+        price: price,
+        description: description,
+        color: color,
+        priceNum: priceNum
+    }
 }
 
 export async function getProductName(productId) {

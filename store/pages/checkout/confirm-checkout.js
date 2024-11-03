@@ -5,9 +5,45 @@ import ReviewCartItem from "../../components/checkout/review-cart-item";
 import Layout from "../../components/layout";
 import PricingCard from "../../components/shopping-cart/pricing-card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect } from "react";
+import { getDb, getProductInfo } from "../../lib/product";
+import { useSearchParams } from 'next/navigation';
 
 function ConfirmCheckout() {
   const router = useRouter();
+
+  const [isLoaded, setLoaded] = useState(false);
+  const [db, setResult] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!isLoaded) {
+          const newData = await getDb();
+          setResult(() => newData);
+          setLoaded(true);
+        }
+      } catch (e) {
+        console.error(`failed to fetch data: ${e}`);
+      }
+    };
+
+    fetchData();
+  }, [db, setResult, isLoaded, setLoaded]);
+
+  const searchParams = useSearchParams();
+  const articleIds = searchParams.get('article_ids')?.split(',') || [];
+
+  let matching = [];
+  let products = [];
+  let subtotal = 0;
+  if (isLoaded) {
+    matching = Object.entries(db).filter(([k, v]) => {
+      return articleIds.includes(k);
+    }).map(([k, v]) => v);
+    products = matching.map((p) => getProductInfo(p));
+    subtotal = products.map((p) => p.priceNum).reduce((a, b) => a+b);
+  }
 
   return (
     <div className="container py-4">
@@ -22,26 +58,22 @@ function ConfirmCheckout() {
             <div className="card-body">
               <h4 className="fw-semibold mb-3">Items in cart</h4>
               <div className="row row-cols-1 row-cols-md-2 g-3">
-                <div className="col">
-                  <ReviewCartItem />
-                </div>
-                <div className="col">
-                  <ReviewCartItem />
-                </div>
-                <div className="col">
-                  <ReviewCartItem />
-                </div>
+                {products.map((product) => {
+                  return (<div className="col">
+                    <ReviewCartItem product={product} />
+                  </div>);
+                })}
               </div>
               <hr className="text-muted" />
               <div className="row g-3">
                 <div className="col-md-6">
                   <h4 className="fw-semibold">Shipping Address</h4>
                   <div className="vstack text-dark small">
-                    <span>Milk Mocha</span>
-                    <span>No. 33, Mocha Street, Milk Township</span>
-                    <span>Yangon, Myanmar</span>
-                    <span>Tel: +95911223344</span>
-                    <span>Email: milkmocha@domain.com</span>
+                    <span>Patrick Star</span>
+                    <span>255 King St. Apt 7000</span>
+                    <span>San Francisco, CA</span>
+                    <span>Tel: (415) 555-5678</span>
+                    <span>Email: patrick@example.com</span>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -61,7 +93,7 @@ function ConfirmCheckout() {
           </div>
         </div>
         <div className="col-lg-4">
-          <PricingCard pricingOnly>
+          <PricingCard pricingOnly subtotal={subtotal}>
             <div className="mt-3 d-grid gap-2">
               <button
                 className="btn btn-primary"

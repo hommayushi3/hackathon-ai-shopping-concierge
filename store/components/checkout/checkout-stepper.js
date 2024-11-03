@@ -1,4 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect } from "react";
+import { getDb, getProductInfo } from "../../lib/product";
+import { useSearchParams } from 'next/navigation';
 
 const stepClass =
   "p-0 position-absolute rounded-circle btn btn-primary fw-bold";
@@ -9,6 +12,40 @@ function CheckoutStepper({ step = 1 }) {
     progress = 50;
   } else if (step == 3) {
     progress = 100;
+  }
+
+  const [isLoaded, setLoaded] = useState(false);
+  const [db, setResult] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!isLoaded) {
+          const newData = await getDb();
+          setResult(() => newData);
+          setLoaded(true);
+        }
+      } catch (e) {
+        console.error(`failed to fetch data: ${e}`);
+      }
+    };
+
+    fetchData();
+  }, [db, setResult, isLoaded, setLoaded]);
+
+  const searchParams = useSearchParams();
+  const articleIds = searchParams.get('article_ids')?.split(',') || [];
+
+  let matching = [];
+  let products = [];
+  if (isLoaded) {
+    matching = Object.entries(db).filter(([k, v]) => {
+      const articleMatch = articleIds.length === 0 || articleIds.includes(k);
+      return articleMatch;
+    }).map(([k, v]) => v);
+    products = matching.map((p) => getProductInfo(p));
+    // console.log(products);
+    // console.log(s);
   }
 
   return (
@@ -56,7 +93,7 @@ function CheckoutStepper({ step = 1 }) {
           Payment
         </span>
         <span className="position-absolute top-50 start-100 translate-middle">
-          Confirmed
+          Confirmation
         </span>
       </div>
     </>

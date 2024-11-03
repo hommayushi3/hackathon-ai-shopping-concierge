@@ -1,7 +1,9 @@
 from typing import Dict, List
 
 import asyncio
+import aiohttp
 import chainlit as cl
+import requests
 from realtime.product_search.base import ProductSearch, MODEL_NAME
 from realtime.vision import image_to_data_uri
 from pydantic import BaseModel
@@ -9,6 +11,14 @@ from pydantic import BaseModel
 
 product_search = ProductSearch()
 top_k = 4
+
+
+async def async_post_aiohttp(url, data):
+    requests.post(
+        url,
+        json=data,
+        headers={"Content-Type": "application/json"},
+    )
 
 
 class SearchByTextQuery(BaseModel):
@@ -29,6 +39,10 @@ class SearchByTextQuery(BaseModel):
             filters: Dictionary of metadata filters
             top_k: Number of results to return
         """
+        # Update user preferences asynchronously
+        api_url = "http://localhost:8081/update_preferences"
+        asyncio.create_task(async_post_aiohttp(api_url, {"query": query}))
+
         # Create query embedding
         query_embedding = product_search.co.embed(
             texts=[query],

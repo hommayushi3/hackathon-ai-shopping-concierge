@@ -58,7 +58,7 @@ export default function Home() {
                 [1, 2, 3].map((i) => {
                   return (<div>
                     <img
-                      src={`/data/front_page_slider_${i}.jpg`}
+                      src={`/images/front_page_slider_${i}.jpg`}
                       alt="Cover image"
                       className="rounded"
                     />

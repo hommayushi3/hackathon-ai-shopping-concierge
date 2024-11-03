@@ -8,6 +8,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import Layout from "../components/layout";
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 config.autoAddCss = false;
 library.add(fab, fas, far);
@@ -16,24 +17,52 @@ if (typeof window !== "undefined") {
   require("bootstrap/dist/js/bootstrap.bundle.min.js");
 }
 
-function addChainlitCopilot() {
-  // https://docs.chainlit.io/deploy/copilot
-  const myScript = document.createElement('script');
-  myScript.src = "http://localhost:8000/copilot/index.js";
-  document.body.appendChild(myScript);
-  myScript.onload = () => {
-    window.addEventListener("chainlit-call-fn", (e) => {
-      const { name, args, callback } = e.detail;
-      callback("You sent: " + args.msg);
-    });
-    window.mountChainlitWidget({
-      chainlitServer: "http://localhost:8000",
-    });
-  };
-}
+let chainlitInitialized = false; // Track initialization status
 
 function MyApp({ Component, pageProps }) {
-  useEffect(addChainlitCopilot, []);
+  const router = useRouter();
+
+  useEffect(() => {
+    function addChainlitCopilot() {
+      if (!chainlitInitialized) {
+        chainlitInitialized = true; // Mark Chainlit as initialized
+
+        // Add the script only once
+        const myScript = document.createElement('script');
+        myScript.src = "http://localhost:8000/copilot/index.js";
+        document.body.appendChild(myScript);
+
+        // Set up the event listener after the script loads
+        myScript.onload = () => {
+          window.addEventListener("chainlit-call-fn", handleChainlitEvent);
+
+          // Initialize the Chainlit widget
+          window.mountChainlitWidget({
+            chainlitServer: "http://localhost:8000",
+          });
+        };
+      }
+    }
+
+    function handleChainlitEvent(e) {
+      const { name, args, callback } = e.detail;
+      callback("You sent: " + args.msg);
+      console.log("You sent: " + JSON.stringify(args));
+
+      // Prepare article_ids as a query parameter if available
+      const articleIds = args.article_ids ? args.article_ids.join(',') : '';
+
+      // Redirect to /explore with article_ids in the query string
+      router.push(`/explore?article_ids=${articleIds}`);
+    }
+
+    addChainlitCopilot();
+
+    return () => {
+      // Clean up event listener only
+      window.removeEventListener("chainlit-call-fn", handleChainlitEvent);
+    };
+  }, [router]);
 
   const getLayout = Component.getLayout;
   if (getLayout) {

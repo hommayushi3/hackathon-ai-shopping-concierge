@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductGridCard from "../../components/product/product-grid-card";
 import { useState, useEffect } from "react";
 import { getDb, getProductInfo } from "../../lib/product";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 
 function ExploreProducts() {
   const categories = ['Ladieswear', 'Menswear', 'Sport', 'Divided', 'Baby/Children'];
@@ -29,21 +29,25 @@ function ExploreProducts() {
   const [isLoaded, setLoaded] = useState(false);
   const [db, setResult] = useState(null);
 
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const category = searchParams.get('cat') || 'all';
-  console.log('category: ' + category);
+  const articleIds = searchParams.get('article_ids')?.split(',') || [];
+  console.log(articleIds);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!isLoaded) {
-        const newData = await getDb();
-        setResult(() => newData);
-        setLoaded(true);
+      try {
+        if (!isLoaded) {
+          const newData = await getDb();
+          setResult(() => newData);  
+          setLoaded(true);  
+        }
+      } catch (e) {
+        console.error(`failed to fetch data: ${e}`);
       }
     };
-    fetchData().catch((e) => {
-      console.error(`failed to fetch data: ${e}`);
-    });
+
+    fetchData();
   }, [db, setResult, isLoaded, setLoaded]);
 
   let matching = [];
@@ -53,12 +57,14 @@ function ExploreProducts() {
     const cols = ['product_group_name', 'product_type_name', 'section_name'];
     const s = cols.map((col) => new Set());
     if (isLoaded) {
-      matching = Object.entries(db).map(([k, v]) => v).filter((v) => {
+      matching = Object.entries(db).filter(([k, v]) => {
         const categoryMatch = category === 'all' || v['index_group_name'] === category;
         const state = typeState[v['product_group_name']];
         const typeMatch = state ? state[0] : false;
-        return categoryMatch && typeMatch;
-      });
+        const articleMatch = articleIds.length === 0 || articleIds.includes(k);
+        // console.log(`${k} ${categoryMatch} ${typeMatch} ${articleMatch}`);
+        return categoryMatch && typeMatch && articleMatch;
+      }).map(([k, v]) => v);
       products = matching.slice(0, 9).map((p) => getProductInfo(p));
       // console.log(products);
       // console.log(s);
@@ -87,9 +93,6 @@ function ExploreProducts() {
                     <a href="#">{category}</a>
                   </li>
                 }
-                {/* <li className="breadcrumb-item active" aria-current="page">
-                  Phones & Tablets
-                </li> */}
               </ol>
             </nav>
           </div>
@@ -217,39 +220,28 @@ function ExploreProducts() {
               </div>
             </div>
             <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-              {products.map((product) => {
-                return <div key={product.id} className="col">
+              {products.map((product) => (
+                <div key={product.id} className="col">
                   <ProductGridCard id={product.id} product={product} />
                 </div>
-              })}
+              ))}
             </div>
-
             <nav className="float-end mt-3">
               <ul className="pagination">
                 <li className="page-item">
-                  <a className="page-link" href="#">
-                    Prev
-                  </a>
+                  <a className="page-link" href="#">Prev</a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
+                  <a className="page-link" href="#">1</a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
+                  <a className="page-link" href="#">2</a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
+                  <a className="page-link" href="#">3</a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
-                    Next
-                  </a>
+                  <a className="page-link" href="#">Next</a>
                 </li>
               </ul>
             </nav>

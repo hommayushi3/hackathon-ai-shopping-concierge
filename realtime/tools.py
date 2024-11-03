@@ -1,5 +1,6 @@
 import re
 
+from realtime.admin_panel import PreferencesUpdate
 from realtime.product_search.tools import SearchByTextQuery, SearchByImageQuery
 from realtime.virtual_try_on import VirtualTryOn
 

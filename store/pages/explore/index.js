@@ -22,8 +22,10 @@ function ExploreProducts() {
     // 'Furniture'
   ];
   const typeState = new Map();
+  let matchingPType = new Map();
   for (let pType of productTypes) {
     typeState[pType] = useState(true);
+    matchingPType[pType] = 0;
   }
 
   const [isLoaded, setLoaded] = useState(false);
@@ -32,7 +34,7 @@ function ExploreProducts() {
   const searchParams = useSearchParams();
   const category = searchParams.get('cat') || 'all';
   const articleIds = searchParams.get('article_ids')?.split(',') || [];
-  console.log(articleIds);
+  console.log('loaded explore page with items ' + articleIds);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,12 +64,16 @@ function ExploreProducts() {
         const state = typeState[v['product_group_name']];
         const typeMatch = state ? state[0] : false;
         const articleMatch = articleIds.length === 0 || articleIds.includes(k);
+        if (categoryMatch) {
+          matchingPType[v['product_group_name']]++;
+        }
         // console.log(`${k} ${categoryMatch} ${typeMatch} ${articleMatch}`);
         return categoryMatch && typeMatch && articleMatch;
       }).map(([k, v]) => v);
       products = matching.slice(0, 9).map((p) => getProductInfo(p));
       // console.log(products);
       // console.log(s);
+      // console.log(matchingPType);
     }
   };
   findMatching();
@@ -162,7 +168,7 @@ function ExploreProducts() {
                               onChange={(e) => onTypeChange(pType, e)} />
                             <label className="fw-medium flex-grow-1">{pType}</label>
                             <span className="badge bg-default rounded-pill my-auto mb-0 text-dark">
-                              50
+                              {matchingPType[pType]}
                             </span>
                           </div>);
                         })

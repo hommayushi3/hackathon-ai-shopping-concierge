@@ -36,13 +36,10 @@ function Header({ simple, hideAuth }) {
             </form>
           </div>
           <div className="d-flex">
-            <img src="/data/person-icon1.png"
-              width={30}
-              height={30}
-            />
             <div>
-              <div className="position-relative ms-2 fw-normal" style={{ "vertical-align": "middle" }}>
-                Welcome, Patrick
+              <div className="btn btn-light position-relative ms-2 fw-normal">
+                <FontAwesomeIcon icon={["fas", "user"]} />
+                &nbsp;Welcome, Patrick
               </div>
               {/* <Link legacyBehavior href="/auth/login">
                 <a className="btn btn-outline-primary d-none d-md-block">

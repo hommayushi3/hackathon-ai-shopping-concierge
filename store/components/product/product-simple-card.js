@@ -14,7 +14,7 @@ function ProductSimpleCard({ id, productName, price }) {
         />
       </div>
       <div className="card-body">
-        <Link legacyBehavior href="/product/1">
+        <Link legacyBehavior href={`/product/${id}`}>
           <a className="mb-1 text-dark text-decoration-none stretched-link">
             {productName}
           </a>
@@ -22,7 +22,7 @@ function ProductSimpleCard({ id, productName, price }) {
 
         <ProductRating />
 
-        <h6 className="mb-0 fw-semibold mt-2">${price}</h6>
+        <h6 className="mb-0 fw-semibold mt-2">{price}</h6>
       </div>
     </div>
   );

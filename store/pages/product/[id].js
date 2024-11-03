@@ -1,9 +1,48 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProductRating from "../../components/product-rating";
 import ProductSimpleHorizontal from "../../components/product/product-simple-horizontal";
+import { useState, useEffect } from "react";
+import { getDb, formatPrice, getProductImage } from "../../lib/product";
+import { useRouter } from 'next/router'
 
 function ProductDetail() {
+  // TODO populate related products
   const images = [2, 4, 6, 8, 1];
+
+  const router = useRouter();
+  const id = router.query.id;
+  console.log(`Product ID: ${id}`);
+
+  const [isLoaded, setLoaded] = useState(false);
+  const [product, setResult] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isLoaded && id) {
+        const db = await getDb();
+        const newData = db[id];
+        console.log(newData);
+        setResult(() => newData);
+        setLoaded(true);
+      }
+    };
+    fetchData().catch((e) => {
+      console.error(`failed to fetch data: ${e}`);
+    });
+  }, [product, setResult, isLoaded, setLoaded, id]);
+
+  // default values
+  let productName = "";
+  let category = "";
+  let price = "";
+  let description = "";
+  // Load real values
+  if (isLoaded) {
+    productName = product['prod_name'];
+    category = product['index_group_name'];
+    price = formatPrice(product['price']);
+    description = product['detail_desc'];
+  }
 
   return (
     <div className="vstack">
@@ -16,10 +55,10 @@ function ProductDetail() {
                   <a href="#">All Categories</a>
                 </li>
                 <li className="breadcrumb-item">
-                  <a href="#">Electronics</a>
+                  <a href="#">{category}</a>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
-                  Product name
+                  {productName}
                 </li>
               </ol>
             </nav>
@@ -35,9 +74,7 @@ function ProductDetail() {
                   <div className="ratio ratio-1x1">
                     <img
                       className="rounded"
-                      src={`https://source.unsplash.com/random/300x300?random=${Math.floor(
-                        Math.random() * 50
-                      )}`}
+                      src={getProductImage(id)}
                       width={300}
                       height={300}
                       alt="Product image."
@@ -56,9 +93,7 @@ function ProductDetail() {
                       >
                         <img
                           className="rounded"
-                          src={`https://source.unsplash.com/random/80x80?random=${Math.floor(
-                            Math.random() * 50
-                          )}`}
+                          src={getProductImage(id)}
                           width={60}
                           height={60}
                           alt="Product image."
@@ -74,7 +109,7 @@ function ProductDetail() {
             <div className="col-lg-7">
               <div className="d-flex">
                 <div className="d-inline h2 mb-0 fw-semibold me-3">
-                  Product name here
+                  {productName}
                 </div>
                 <div className="ms-auto">
                   <button
@@ -97,19 +132,17 @@ function ProductDetail() {
                     &nbsp;In Stock
                   </span>
                 </div>
-                <h4 className="fw-semibold">15000Ks</h4>
+                <h4 className="fw-semibold">{price}</h4>
                 <p className="fw-light">
-                  Lorem ipsum is placeholder text commonly used in the graphic,
-                  print, and publishing industries for previewing layouts and
-                  visual mockups.
+                  {description}
                 </p>
                 <dl className="row mb-0">
-                  <dt className="col-sm-3 fw-semibold">Code#</dt>
-                  <dd className="col-sm-9">10001</dd>
+                  <dt className="col-sm-3 fw-semibold">Product code</dt>
+                  <dd className="col-sm-9">{id}</dd>
                   <dt className="col-sm-3 fw-semibold">Category</dt>
-                  <dd className="col-sm-9">Electronics</dd>
+                  <dd className="col-sm-9">{category}</dd>
                   <dt className="col-sm-3 fw-semibold">Delivery</dt>
-                  <dd className="col-sm-9">Yangon, Mandalay</dd>
+                  <dd className="col-sm-9">San Francisco, CA</dd>
                 </dl>
                 <hr className="text-muted" />
                 <dl className="row gy-2 mb-4">

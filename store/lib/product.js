@@ -37,5 +37,5 @@ export function getProductImage(productId) {
 }
 
 export function formatPrice(priceStr) {
-    return Number(priceStr).toFixed(2);
+    return `$${Number(priceStr).toFixed(2)}`;
 }

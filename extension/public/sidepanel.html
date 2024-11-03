@@ -1,0 +1,59 @@
+<html>
+<head>
+  <title>Preferences Manager</title>
+  <style>
+    body {
+        width: 300px;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+    .section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+    }
+    h2 {
+        margin-top: 0;
+        color: #333;
+        font-size: 1.2em;
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    li {
+        margin: 8px 0;
+        padding: 8px;
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .loading {
+        display: none;
+        color: #666;
+        font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">Updating preferences...</div>
+  
+  <div class="section">
+      <h2>Personal Details</h2>
+      <ul id="personal-details"></ul>
+  </div>
+  
+  <div class="section">
+      <h2>Style Preferences</h2>
+      <ul id="style-preferences"></ul>
+  </div>
+  
+  <div class="section">
+      <h2>Color Preferences</h2>
+      <ul id="color-preferences"></ul>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

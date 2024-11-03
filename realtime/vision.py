@@ -118,7 +118,7 @@ class VisionModel:
                     ]
                 }
             ],
-            # safety_settings=SAFETY_SETTINGS
+            safety_settings=SAFETY_SETTINGS
         )
         return result.choices[0].message.content
             
@@ -154,7 +154,7 @@ class VisionModel:
                     ]
                 },
             ],
-            # safety_settings=SAFETY_SETTINGS,
+            safety_settings=SAFETY_SETTINGS,
             response_format=RerankResults
         )
         return [int(i) for i in eval(result.choices[0].message.content)["indices"]]
@@ -195,7 +195,7 @@ class VisionModel:
                     ]
                 },
             ],
-            # safety_settings=SAFETY_SETTINGS,
+            safety_settings=SAFETY_SETTINGS,
             response_format=RerankResults
         )
         return [int(i) for i in eval(result.choices[0].message.content)["indices"]]
@@ -232,7 +232,7 @@ class VisionModel:
                     ]
                 },
             ],
-            # safety_settings=SAFETY_SETTINGS,
+            safety_settings=SAFETY_SETTINGS,
             response_format=IdentifyPreviousRecommendationIndex
         )
         try:
@@ -263,7 +263,7 @@ class VisionModel:
                     ]
                 },
             ],
-            # safety_settings=SAFETY_SETTINGS,
+            safety_settings=SAFETY_SETTINGS,
             response_format=MetadataFilterResults
         )
         return json.loads(result.choices[0].message.content)["filter_values"]

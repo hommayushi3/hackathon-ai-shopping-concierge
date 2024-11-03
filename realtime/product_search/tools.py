@@ -29,7 +29,6 @@ class SearchByTextQuery(BaseModel):
             filters: Dictionary of metadata filters
             top_k: Number of results to return
         """
-        await cl.Message(content=f"Searching for new recommendations!").send()
         # Create query embedding
         query_embedding = product_search.co.embed(
             texts=[query],
@@ -97,7 +96,6 @@ class SearchByImageQuery(BaseModel):
         Args:
             user_description_of_previous_recommendation
         """
-        await cl.Message(content=f"Searching for new similar recommendations!").send()
         vision_model = cl.user_session.get("vision_model")
         latest_products = cl.user_session.get("latest_products")
         product_in_question_index = await vision_model.identify_previous_recommendation(

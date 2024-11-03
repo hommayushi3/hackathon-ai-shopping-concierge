@@ -1,5 +1,6 @@
 import re
 
+from realtime.admin_panel import PreferencesUpdate
 from realtime.product_search.tools import SearchByTextQuery, SearchByImageQuery
 from realtime.virtual_try_on import VirtualTryOn
 
@@ -21,5 +22,5 @@ def pydantic_to_tool_schema(pydantic_model):
     )
 
 
-tool_models = [SearchByTextQuery, SearchByImageQuery, VirtualTryOn]
+tool_models = [SearchByTextQuery, SearchByImageQuery, VirtualTryOn, PreferencesUpdate]
 tools = list(map(pydantic_to_tool_schema, tool_models))

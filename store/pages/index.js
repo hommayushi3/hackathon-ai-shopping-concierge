@@ -94,8 +94,7 @@ export default function Home() {
                 </div>
                 <h5 className="mb-1 fw-bold">Reasonable Price</h5>
                 <figcaption className="figure-caption text-dark">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Shop confidently with our competitively priced fashion collections. We believe great style shouldn't break the bank, offering quality clothing at prices that make sense. From everyday basics to seasonal trends, find your perfect look without compromising your budget.
                 </figcaption>
               </figure>
             </div>
@@ -115,8 +114,7 @@ export default function Home() {
                 </div>
                 <h5 className="mb-1 fw-bold">Customer Support 24/7</h5>
                 <figcaption className="figure-caption text-dark">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Have questions? We're here around the clock to help! Our dedicated support team is ready to assist with sizing guidance, order tracking, or any other concerns. Whether it's midnight or midday, reach out via chat, email, or phone. Your satisfaction is our priority, backed by our hassle-free return policy.
                 </figcaption>
               </figure>
             </div>
@@ -136,9 +134,7 @@ export default function Home() {
                 </div>
                 <h5 className="mb-1 fw-bold">Fast Delivery</h5>
                 <figcaption className="figure-caption text-dark">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </figcaption>
+                  Get your new favorite pieces faster with our swift shipping service. Most orders ship within 24 hours, and we offer multiple delivery options to suit your needs. Track your package every step of the way, and enjoy free shipping on orders over a certain value. Because great style shouldn't keep you waiting.                </figcaption>
               </figure>
             </div>
           </div>

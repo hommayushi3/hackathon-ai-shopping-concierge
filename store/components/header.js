@@ -131,7 +131,7 @@ function Header({ simple, hideAuth }) {
                     </li>
                     <li>
                       <a href="#" className="dropdown-item mt-1">
-                        Myanmar
+                        日本語
                       </a>
                     </li>
                   </ul>

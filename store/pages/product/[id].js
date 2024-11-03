@@ -62,17 +62,12 @@ function ProductDetail() {
                 <div className="col-12">
                   <div justify-content-center>
                     <img
-                        className="rounded"
-                        src={getProductImage(id)}
-                        style={{
-                          "max-width": "fit-content",
-                          "align-items": "center",
-                          "justify-content": "center"
-                        }}
-                        width={300}
-                        // height={300}
-                        alt="Product image."
-                      />
+                      className="rounded"
+                      src={getProductImage(id)}
+                      width={300}
+                      // height={300}
+                      alt="Product image."
+                    />
                   </div>
                 </div>
               </div>
@@ -127,6 +122,7 @@ function ProductDetail() {
                   </span>
                 </div>
                 <h4 className="fw-semibold">{info.price}</h4>
+                <span className="text-muted">{info.color}</span>
                 <p className="fw-light">
                   {info.description}
                 </p>
@@ -164,7 +160,7 @@ function ProductDetail() {
                           name="color2"
                           id="c2"
                           checked
-                          onChange={() => {}}
+                          onChange={() => { }}
                         />
                         <label
                           className="form-check-label fw-medium"
@@ -200,7 +196,7 @@ function ProductDetail() {
                           name="size1"
                           id="s1"
                           checked
-                          onChange={() => {}}
+                          onChange={() => { }}
                         />
                         <label
                           className="form-check-label fw-medium"

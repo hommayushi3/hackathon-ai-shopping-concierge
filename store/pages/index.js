@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Carousel } from "react-responsive-carousel";
 import ProductSimpleCard from "../components/product/product-simple-card";
 import { useState, useEffect } from "react";
-import { getDb, formatPrice } from "../lib/product";
+import { getDb, formatPrice, getProductInfo } from "../lib/product";
 
 export default function Home() {
   const [isLoaded, setLoaded] = useState(false);
@@ -134,11 +134,10 @@ export default function Home() {
           {
             db &&
             Object.keys(db).slice(0, 12).map((id) => {
-              const productName = isLoaded ? db[id]['prod_name'] : `Product ${id}`;
-              const price = isLoaded ? formatPrice(db[id]['price']) : 0;
+              const product = getProductInfo(db[id]);
               return (
                 <div className="col" key={id}>
-                  <ProductSimpleCard id={id} productName={productName} price={price} />
+                  <ProductSimpleCard id={id} product={product} />
                 </div>
               );
             })}

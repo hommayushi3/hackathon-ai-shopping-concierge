@@ -47,6 +47,7 @@ function ProductGridCard({ id, product, off }) {
           <Link legacyBehavior href={getProductLink(id)}>
             <a className="text-dark text-decoration-none">{product.productName}</a>
           </Link>
+          <span className="text-muted small">{product.color}</span>
 
           <h6 className="fw-semibold">{product.price}</h6>
 

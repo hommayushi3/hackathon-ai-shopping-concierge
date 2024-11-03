@@ -243,7 +243,7 @@ function ProductDetail() {
 
                 <div className="d-flex">
                   <a
-                    href="#"
+                    href={`/checkout/confirm-checkout?article_ids=${id}`}
                     className="btn btn-primary px-md-4 col col-md-auto me-2"
                   >
                     Buy now

@@ -50,15 +50,17 @@ function Header({ simple, hideAuth }) {
                 </Link>
               </>
             )}
-            <Link legacyBehavior href="/shopping-cart">
-              <a className="btn btn-light border position-relative ms-2 fw-normal">
-                <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
-                &nbsp;Cart
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-auto">
-                  3
-                </span>
-              </a>
-            </Link>
+            {/* <Link legacyBehavior href="/shopping-cart"> */}
+            {/* <a className="btn btn-light border position-relative ms-2 fw-normal"> */}
+            <div className="btn btn-light border position-relative ms-2 fw-normal">
+              <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
+              &nbsp;Cart
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-auto">
+                3
+              </span>
+              {/* </a> */}
+            </div>
+            {/* </Link> */}
           </div>
         </div>
       </nav>

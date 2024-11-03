@@ -87,7 +87,7 @@ function Header({ simple, hideAuth }) {
               <ul className="navbar-nav">
                 {
                   categories.map((category) => {
-                    return (<li className="nav-item">
+                    return (<li key={`nav-${category}`} className="nav-item">
                       <Link legacyBehavior href={`/explore?cat=${category}`}>
                         <a className="nav-link">{category}</a>
                       </Link>

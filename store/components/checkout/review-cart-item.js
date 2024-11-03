@@ -1,13 +1,16 @@
 import Link from "next/link";
-import { getProductImage, getProductLink } from "../../lib/product";
+import { getProductImage, getProductInfo, getProductLink } from "../../lib/product";
 
-function ReviewCartItem({ product }) {
+function ReviewCartItem({ id, product }) {
+  if (!product) {
+    product = getProductInfo(0);
+  }
   return (
     <div className="d-flex">
       <div className="flex-shink-0">
         <img
           className="rounded"
-          src={getProductImage(product.id)}
+          src={getProductImage(id)}
           width={80}
           height={80}
           alt="Product image."
@@ -16,7 +19,7 @@ function ReviewCartItem({ product }) {
       </div>
       <div className="flex-grow-1 ms-3 h-100">
         <div className="vstack">
-          <Link legacyBehavior href={getProductLink(product.id)}>
+          <Link legacyBehavior href={getProductLink(id)}>
             <a className="text-dark text-decoration-none">{product.productName}</a>
           </Link>
           <small className="text-muted mb-2" style={{ fontSize: 12 }}>

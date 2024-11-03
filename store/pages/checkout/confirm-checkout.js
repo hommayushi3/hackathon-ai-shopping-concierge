@@ -60,7 +60,7 @@ function ConfirmCheckout() {
               <div className="row row-cols-1 row-cols-md-2 g-3">
                 {products.map((product) => {
                   return (<div className="col">
-                    <ReviewCartItem product={product} />
+                    <ReviewCartItem id={product.id} product={product} />
                   </div>);
                 })}
               </div>

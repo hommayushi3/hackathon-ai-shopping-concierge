@@ -37,10 +37,9 @@ is not part of the query, return an empty list. For example, if the query is "dr
 is "colour_group", return [].
 """).strip()
 IDENTIFY_PREVIOUS_RECOMMENDATION_PROMPT = cleandoc("""
-Identify the index of the previous product recommendation that the user is referencing based on the description provided and the 4 products listed.
+Identify the index of the previous product recommendation that the user is referencing based on the description provided and the products listed.
 The user may reference the location of the product in the UI, here is the translation guide.
-(top left = index 1, bottom left = index 2, top right = index 3, bottom right = index 4).
-Your response should simply be the integer index of the product referenced, 1-{num_products}.
+Your response should simply be the integer index of the product referenced.
 """).strip()
 
 
@@ -223,7 +222,7 @@ class VisionModel:
                     ] + [
                         {
                             "type": "text",
-                            "text": f"{i + 1}. {product['metadata']['prod_name']} - {product['metadata']['detail_desc']} ({product['metadata']['colour_group_name']} | {product['metadata']['section_name']})"
+                            "text": f"{i}. {product['metadata']['prod_name']} ({product['metadata']['colour_group_name']}"
                         } if is_prod else {
                             "type": "image_url",
                             "image_url": {"url": image_to_data_uri(product["metadata"]["image"])}
@@ -236,7 +235,7 @@ class VisionModel:
             safety_settings=SAFETY_SETTINGS
         )
         try:
-            return int(re.findall(r'\d', result.choices[0].message.content)[0]) - 1
+            return int(re.findall(r'\d', result.choices[0].message.content)[0])
         except Exception:
             return 0
         

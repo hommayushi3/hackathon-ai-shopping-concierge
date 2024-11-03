@@ -49,7 +49,7 @@ class RedisCache:
         
         # Only include essential fields in cache key to save space
         cache_data = {
-            'data': {k: v for k, v in data.items() if k not in ['cloth_image', 'base64']},
+            'data': {k: v for k, v in data.items() if k not in ['model_image', 'base64']},
             'headers': headers_copy
         }
         return f"{self.prefix}{hashlib.md5(dumps(cache_data, sort_keys=True).encode()).hexdigest()}"
@@ -71,8 +71,8 @@ class RedisCache:
             if data is None:
                 return None
                 
-            decompressed = self._decompress_data(data)
-            return loads(decompressed)
+            # decompressed = self._decompress_data(data)
+            return data
         except Exception:
             import traceback
             traceback.print_exc()
@@ -86,17 +86,17 @@ class RedisCache:
         """Cache response with compression if needed."""
         try:
             # Serialize the response data
-            data = dumps(response_data).encode()
+            data = response_data
             
             # Skip if data is too large
             if len(data) > self.max_item_size:
                 return False
                 
             # Add compression flag and possibly compress
-            if len(data) > self.compression_threshold:
-                data = self._compress_data(data)
-            else:
-                data = b'0' + data
+            # if len(data) > self.compression_threshold:
+            #     data = self._compress_data(data)
+            # else:
+            #     data = b'0' + data
                 
             # Use pipeline for atomic operation
             pipe = self.redis_client.pipeline()
@@ -127,7 +127,7 @@ class RedisCache:
         cached_response = self.get_cached_response(cache_key)
         if cached_response is not None:
             response = requests.Response()
-            response._content = dumps(cached_response).encode()
+            response._content = cached_response
             response.status_code = 200
             return response
         
@@ -137,7 +137,7 @@ class RedisCache:
         # Cache successful responses
         if response.status_code == 200:
             try:
-                response_data = response.json()
+                response_data = response.content
                 self.cache_response(cache_key, response_data)
             except Exception:
                 import traceback

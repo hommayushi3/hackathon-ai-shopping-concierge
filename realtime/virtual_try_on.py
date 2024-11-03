@@ -63,7 +63,8 @@ class VirtualTryOn(BaseModel):
         )
         product = latest_products[index]
         cl.user_session.set("latest_try_on_product", product)
-        await asyncio.create_task(
+        print("Identified recommendation")
+        asyncio.create_task(
             cl.CopilotFunction(
                 name="try_on",
                 args={"article_ids": [product["metadata"]["article_id"]]}
@@ -85,7 +86,9 @@ class VirtualTryOn(BaseModel):
         if seed is not None:
             data["seed"] = seed
         headers = {'x-api-key': SEGMIND_API_KEY}
+        print("Running try on")
         response = redis_cache.make_cached_request(SEGMIND_API_BASE, json=data, headers=headers)
+        print("Got response")
 
         elements = [
             cl.Image(
